@@ -82,6 +82,36 @@ Push a new branch:
 ```bash
 git push -u origin feat/example-feature
 ```
+Review a specific file:
+
+```bash
+git diff -- path/to/file
+```
+
+Summarize unstaged changes:
+
+```bash
+git diff --stat
+```
+
+Check staged changes for whitespace errors before committing:
+
+```bash
+git diff --cached --check
+```
+
+Review recent commits:
+
+```bash
+git log -5 --oneline
+```
+
+Switch to an existing branch:
+
+```bash
+git switch branch-name
+```
+
 
 ## 5. Commit Message Convention
 
