@@ -190,3 +190,34 @@ Only move pending items to completed after verifying the actual result.
 Implement local PDF text extraction with page-level source information,
 automated tests, and explicit handling of invalid PDFs and PDFs without
 extractable text. This feature has not yet been implemented.
+
+## Milestone: PDF Text Extraction
+
+**Branch:** `feat/pdf-text-extraction`
+
+### Completed
+
+- Added PyMuPDF as a declared project dependency.
+- Documented the system overview and PDF extraction low-level design.
+- Implemented PDF text extraction with one-based page numbers.
+- Added structured results using `ExtractedDocument` and `ExtractedPage`.
+- Added explicit exceptions for invalid PDFs, password-protected PDFs, and PDFs without extractable text.
+- Preserved page order and source filename metadata.
+- Added automated tests for single-page and multi-page PDFs, blank PDFs, missing files, invalid PDFs, and password-protected PDFs.
+
+### Verification
+
+- `python -m pytest -v`: 7 tests passed.
+- `python -m ruff check .`: passed.
+- `python -m ruff format --check .`: passed.
+- `python -m pip check`: no broken requirements found.
+- `git diff --check`: no whitespace errors reported.
+
+PyMuPDF emitted non-fatal deprecation warnings during testing.
+
+### Remaining Work
+
+- Review the implementation against the low-level design.
+- Review the complete staged changes before committing.
+- Add passage chunking and source metadata as the next ingestion milestone.
+- OCR for scanned PDFs remains outside the current scope.
