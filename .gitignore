@@ -25,3 +25,6 @@ htmlcov/
 # Local data and generated artifacts
 data/
 artifacts/
+
+# Generated Python package metadata
+*.egg-info/
