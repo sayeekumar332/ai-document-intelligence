@@ -126,12 +126,67 @@ Completed and verified:
 - Git remote URL correction.
 - Feature branch creation.
 
-Pending:
+### Status at the end of initial project configuration
 
-- Project configuration file.
-- Automated tests and linting.
-- Application modules.
+Completed:
+- Project configuration in `pyproject.toml`.
+- Python package scaffold and version test.
+- pytest and Ruff installation.
+- Package test execution.
+- Ruff lint and formatting checks.
+- Generated package metadata excluded through `.gitignore`.
+
+Pending:
+- PDF text extraction and its automated tests.
+- Document chunking and retrieval.
+- Local language-model integration.
+- API and user interface.
 - Continuous integration.
 - Push of the feature branch and pull request.
 
 Only move pending items to completed after verifying the actual result.
+## 2026-10-22 — Python project configuration milestone
+
+### Completed work
+
+1. Created the initial repository and README.
+2. Added development setup and Git workflow documentation.
+3. Created `pyproject.toml` with project metadata, Python version
+   requirements, development dependencies, pytest configuration, and
+   Ruff linting and formatting rules.
+4. Created the Python package at `src/ai_document_intelligence/`.
+5. Added a package-version test in `tests/test_package.py`.
+6. Installed the project in editable mode with `python -m pip install -e ".[dev]"`.
+7. Installed pytest and Ruff as development tools.
+8. Added `*.egg-info/` to `.gitignore` to exclude generated package metadata.
+
+### Verification
+
+- Python version: 3.12.3.
+- pytest: the package-version test was collected and passed.
+- Ruff lint check: passed.
+- Ruff formatting check: passed; six files were already formatted.
+- Git working tree: clean after the latest commit.
+- Active branch: `feat/project-configuration`.
+
+### Relevant commits
+
+- `2f3db98` — Initial project setup.
+- `45f79ff` — Development setup and Git workflow documentation.
+- `35dcb7d` — Python package and quality-check configuration.
+- `a4972f2` — Ignore generated Python package metadata.
+
+### Engineering decisions and lessons
+
+- Use a project-local virtual environment.
+- Keep source code, tests, and documentation in separate directories.
+- Use feature branches rather than developing directly on `main`.
+- Run tests, linting, and formatting checks before committing.
+- Exclude generated build metadata and local environment files from Git.
+- Add runtime dependencies only when required by an implemented feature.
+
+### Next planned feature
+
+Implement local PDF text extraction with page-level source information,
+automated tests, and explicit handling of invalid PDFs and PDFs without
+extractable text. This feature has not yet been implemented.
