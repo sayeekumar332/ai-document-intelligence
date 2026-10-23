@@ -60,7 +60,7 @@ The initial public function is:
 
 `extract_pdf(path, document_id) -> ExtractedDocument`
 
-The exact Python type annotations and exception classes will be finalized before implementation.
+The public interface and exception classes are defined in the implementation. See Sections 12 and 13.
 
 The function must not silently convert extraction failures into successful empty results.
 
@@ -91,7 +91,7 @@ The implementation must distinguish these conditions:
 | Valid PDF with no extractable text | Report a distinct no-text condition |
 | Successful extraction | Return ordered page-level text and metadata |
 
-The exact exception hierarchy and messages will be defined in the implementation design.
+The exception hierarchy is defined in Section 12. Exact error messages are implementation details; callers should rely on exception types.
 
 ## 8. Testing Design
 
@@ -123,7 +123,7 @@ The component is ready when:
 
 ## 10. Dependencies
 
-PyMuPDF will be used for PDF reading and text extraction. Its dependency declaration will be added to `pyproject.toml` as part of the implementation work.
+PyMuPDF is used for PDF reading and text extraction. Its dependency is declared in `pyproject.toml`.
 
 The project must verify the installed dependency and run the test suite before the feature is considered complete.
 
@@ -174,3 +174,47 @@ The PDF resource must be closed after successful extraction and after failures.
 For this version, if all pages contain no extractable text, raise `PDFNoExtractableTextError`.
 
 OCR and recovery of text from image-only pages are outside the initial implementation scope.
+
+## 15. Real-Document Validation
+
+### Reference document
+
+The initial real-document validation uses the following local reference:
+
+- Document: US Patent 4,803,615, *Microcode Control of a Parallel Architecture Microprocessor*.
+- Local reference path: supplied through the `REFERENCE_PDF_PATH` environment variable; the PDF is not stored in the repository.
+- Page count reported by PyMuPDF: 14.
+- Total extracted characters reported by the inspection script: 48,614.
+- Pages inspected visually: 2, 3, 4, 10, and 11.
+- Visual inspection outcome: the generated page previews were reported as legible.
+
+These results are observations from a development inspection, not a substitute for
+automated integration-test assertions.
+
+### Visual-content limitations
+
+The initial extraction component returns text and page metadata. It does not
+interpret diagrams, determine relationships between figure elements, or guarantee
+that all labels in a figure are searchable as text.
+
+The inspection script reported image information on all 14 pages and zero vector
+drawing objects. These counts alone do not establish that figures are semantically
+understood or that all visual content is represented in extracted text.
+
+Figure interpretation and image-based question answering remain outside the
+initial extraction scope.
+
+### Integration-test policy
+
+- Keep deterministic, generated PDFs for unit tests covering success and failure
+  cases.
+- Use the real patent for local integration validation of text extraction and
+  page provenance.
+- Configure the reference PDF path through an environment variable rather than
+  embedding a developer-specific absolute path in automated tests.
+- Skip the real-document integration test with an explicit reason when the
+  reference PDF is not configured or is unavailable.
+- Do not commit the reference PDF to the repository.
+
+The real-document integration test must verify the document's page count, the
+presence of extracted text, and the preservation of one-based page numbers.
