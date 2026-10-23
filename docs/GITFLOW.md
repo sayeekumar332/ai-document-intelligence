@@ -62,7 +62,7 @@ Review changes:
 
 ```bash
 git diff
-git diff --staged
+git diff --cached
 ```
 
 Stage specific files:
@@ -152,9 +152,150 @@ For a solo-developed project, the author should perform a deliberate self-review
 - Do not force-push or overwrite remote history without a justified, understood reason.
 - Inspect remote state before pushing if the remote may already contain commits.
 - Keep changes focused and easy to review.
+- Never commit local .env files or other files containing secrets.
+- Keep generated files, temporary test artifacts, and local-only datasets out of Git unless explicitly required.
+- Never add the local reference PDF used for integration testing to the public repository.
 
 ## 8. Merge Policy
 
 The intended policy is to merge feature branches into `main` through pull requests after the relevant checks pass.
 
 Where GitHub repository settings support branch protection or rulesets, configure appropriate restrictions for `main`. These settings must be verified in GitHub; this document does not imply that protection is already enabled.
+
+After a pull request is merged, synchronize the local main branch with origin/main before creating the next task branch.
+
+## 9. Feature Branch to Pull Request Workflow
+
+Follow this procedure for every new feature or documentation change.
+
+### Step 1: Synchronize with the latest main branch
+
+Start with a clean working tree. If uncommitted changes exist, review and preserve them before switching branches.
+
+```bash
+git status --short --branch
+git switch main
+git pull --ff-only origin main
+git status --short --branch
+```
+
+Confirm that the working tree is clean before proceeding.
+
+### Step 2: Create a dedicated branch
+
+Create the branch from the updated `main` branch.
+
+```bash
+git switch -c feat/example-feature
+```
+
+Use the appropriate prefix for the work:
+
+- `feat/` for new functionality.
+- `fix/` for bug fixes.
+- `test/` for test-focused changes.
+- `docs/` for documentation-only changes.
+- `ci/` for continuous integration changes.
+
+### Step 3: Implement and validate the change
+
+Keep the change focused. Add or update tests and documentation where applicable.
+
+Run the project's standard quality checks:
+
+```bash
+python -m pytest -q
+python -m ruff check .
+python -m ruff format --check .
+git diff --check
+```
+
+Run any feature-specific integration tests as well. For real-PDF integration tests, configure `REFERENCE_PDF_PATH` to point to the local reference PDF when required. Never add the private or reference PDF to the repository.
+
+Record only checks that were actually executed and passed.
+
+### Step 4: Review and stage the changes
+
+Inspect the changes before staging:
+
+```bash
+git status --short
+git diff
+git diff --stat
+```
+
+Stage only the intended files:
+
+```bash
+git add path/to/file
+```
+
+Review the staged changes:
+
+```bash
+git diff --cached --check
+git diff --cached --stat
+git diff --cached
+git status --short
+```
+
+Check for accidental inclusion of credentials, private documents, generated files, or unrelated changes.
+
+### Step 5: Commit and push
+
+Commit the verified changes using the project's commit message convention.
+
+```bash
+git commit -m "docs: document complete Git workflow"
+git push -u origin docs/update-gitflow-workflow
+```
+
+For subsequent commits on the same branch, use:
+
+```bash
+git push
+```
+
+### Step 6: Open and merge a pull request
+
+On GitHub:
+
+1. Open a pull request from the working branch into `main`.
+2. Describe the requirement, implementation, design decisions, tests, limitations, and documentation changes.
+3. Review the diff and inspect the available automated check results.
+4. Merge only after the required checks pass and the review is complete.
+
+For solo development, perform a deliberate self-review. Do not claim an independent review unless another person performed it.
+
+### Step 7: Synchronize local main after merging
+
+After the pull request has been merged on GitHub:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git status --short --branch
+```
+
+Confirm that local `main` contains the merged changes and the working tree is clean.
+
+### Step 8: Start the next task
+
+Create the next task branch from the updated `main` branch. Do not base new work on a stale local `main` branch.
+
+Example:
+
+```bash
+git switch -c feat/local-semantic-retrieval
+```
+
+### Workflow rules
+
+- Do not commit directly to `main`.
+- Use a dedicated branch for each task.
+- Run relevant tests and quality checks before committing.
+- Review staged changes before committing.
+- Use pull requests to merge changes into `main`.
+- Synchronize local `main` after each merge.
+- Keep private documents, credentials, and local environment files out of Git.
+- Update tests and documentation when the feature changes their behavior or design.
