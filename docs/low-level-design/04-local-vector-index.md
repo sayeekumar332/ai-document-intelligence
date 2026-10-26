@@ -1,84 +1,88 @@
-# Low-Level Design: Local Vector Index
+# Low-Level Design: PostgreSQL Vector Index
 
 ## 1. Purpose
 
-Provide persistent local storage and exact similarity search for
-provenance-preserving embedded passages in the AI Document Intelligence
-Platform.
+Provide persistent vector storage and semantic similarity search for the
+AI Document Intelligence Platform using PostgreSQL and pgvector.
 
-The component builds on the existing embedding-generation interface and
-must support retrieval of relevant passages with their original source
-metadata.
+The index builds on the existing embedding-generation component and returns
+ranked passages with their original source metadata.
 
 ## 2. Scope
 
 ### Included
-- Persist embedded passages locally.
+- Store embedded passages in PostgreSQL.
+- Use pgvector's native vector type.
 - Preserve passage identifiers, document identifiers, source names,
   page numbers, and original text.
-- Store embedding vectors in a defined binary representation.
-- Validate embedding dimensions and numerical values.
-- Insert or update passages atomically.
+- Insert or update passages transactionally.
 - Delete passages belonging to a document.
-- Search stored embeddings by cosine similarity.
-- Return the highest-scoring passages with their provenance.
-- Reopen an index and retain its data between program executions.
-- Test storage and retrieval using temporary database files.
+- Search by cosine distance.
+- Return ranked passages with provenance and similarity scores.
+- Validate embedding dimensions, numerical values, and query parameters.
+- Preserve data between application executions.
+- Test against a real local PostgreSQL database.
 
 ### Excluded
 - PDF extraction and passage chunking.
-- Generating embeddings for text queries.
-- Approximate nearest-neighbor indexing.
-- Cloud vector databases.
-- LLM answer generation and response synthesis.
+- Generating embeddings for queries.
+- LLM answer generation.
 - OCR and image embeddings.
+- Cloud-hosted database deployment.
+- Approximate nearest-neighbor indexing in the initial implementation.
 
-## 3. Storage Technology
+## 3. Database Technology
 
-Use Python's built-in `sqlite3` module for persistence.
+Use PostgreSQL 17 with the pgvector extension.
 
-Reasons:
-- No separate database server is required.
-- Database transactions provide atomic batch updates.
-- Passage metadata can be queried using SQL.
-- The database is a local file.
-- No additional package dependency is required for persistence.
+Proposed Docker image:
 
-Proposed default database path:
+`pgvector/pgvector:0.8.7-pg17-bookworm`
 
-`data/vector-index.sqlite3`
+Pinning the image version makes development environments reproducible and
+avoids silently changing the PostgreSQL or pgvector version.
 
-The path must remain configurable so tests can use temporary files and
-applications can choose a different storage location.
+The database runs locally through Docker Compose. No cloud database or
+paid AI service is required.
 
-The `data/` directory is already ignored by the project's `.gitignore`.
-The database and generated embedding data must not be committed.
+Proposed local host connection:
+- Host: `127.0.0.1`
+- Port: `54329`
+- Database: `ai_document_intelligence`
 
-## 4. Database Schema
+Port 54329 is configurable and avoids requiring the host's default
+PostgreSQL port.
+
+Persistent database files are managed through a named Docker volume.
+Database data, credentials, and local environment files must not be
+committed to Git.
+
+## 4. PostgreSQL Extension and Schema
+
+Enable pgvector in the target database:
+
+`CREATE EXTENSION IF NOT EXISTS vector;`
 
 ### 4.1 Index metadata
 
-Maintain index-level metadata containing:
+Maintain index metadata containing:
 - `schema_version`
 - `model_name`
 - `embedding_dimension`
 - `vector_encoding`
+- `distance_metric`
+- `pgvector_version`
 
-The metadata identifies the database schema and the configured
-embedding model and dimension used to construct the index.
+The metadata identifies the schema and configured embedding space.
 
-The current `EmbeddedPassage` record does not contain a model identifier
-or model revision. Therefore, the index cannot independently verify the
-origin of each incoming vector. The caller must ensure that inserted
-passages and search query vectors were generated using the index's
-configured model and compatible embedding settings.
+The current `EmbeddedPassage` record does not identify the model revision
+that produced each vector. The index therefore cannot independently prove
+the origin of every incoming vector. The caller must ensure that stored
+passages and query embeddings use the configured model and compatible
+settings.
 
-The initial vector encoding is little-endian IEEE 754 float32.
-
-When an existing index is opened, its stored model name and dimension
-must be checked against the requested configuration. Incompatible
-configuration must produce a clear application-level error rather than
-silently mixing embeddings from different model spaces.
+Opening an existing index with an incompatible model name, dimension,
+or schema version must fail clearly rather than silently mixing vectors.
 
 ### 4.2 Passages table
 
@@ -91,178 +95,183 @@ Proposed logical schema:
 | `source_name` | Original source filename |
 | `page_number` | Original page number |
 | `text` | Original passage text |
-| `embedding` | Embedding stored as a binary BLOB |
+| `embedding` | pgvector `vector(384)` column |
 
-Create an index on `document_id` to support document-level deletion.
+The embedding dimension is configurable at index initialization. The
+database schema must use the configured dimension consistently.
 
-The `passage_id` remains the unique passage key. Re-indexing a passage
-with the same ID updates its stored text, metadata, and embedding.
+Add a B-tree index on `document_id` to support document-level deletion.
 
-## 5. Vector Representation
+Use parameterized SQL for values. Do not interpolate untrusted text into
+SQL statements.
 
-Store each vector as a sequence of float32 values in a SQLite BLOB.
+## 5. Vector Representation and Similarity
 
-The representation must:
-- Use the configured embedding dimension.
-- Use little-endian byte ordering.
-- Have exactly four bytes per vector component.
-- Be encoded and decoded consistently.
-- Reject vectors with incorrect dimensions.
-- Reject NaN, infinity, and zero-norm vectors for cosine similarity.
-- Detect values that cannot be represented safely as float32.
+Use pgvector's native `vector(n)` type, with `n` equal to the configured
+embedding dimension. Do not manually serialize embeddings into SQLite
+BLOBs or manage binary byte ordering in application code.
 
-The binary representation is an internal storage format, not a public
-API. A future storage implementation may use a different representation
-provided its interface and migration requirements are explicit.
+The first implementation performs exact cosine-distance search.
+
+pgvector represents cosine distance using the `<=>` operator. Rank results
+in ascending distance order:
+
+`ORDER BY embedding <=> query_vector`
+
+The similarity score returned by the application is:
+
+`similarity = 1 - cosine_distance`
+
+The Python layer must validate:
+- Correct embedding dimensions.
+- Finite numeric values.
+- Non-zero vector norms.
+- Positive `top_k`.
+- Consistent model and index configuration.
+
+Do not assume vectors supplied by injected models are normalized.
 
 ## 6. Proposed Python Interface
 
-Proposed module:
+Module:
 
-`src/ai_document_intelligence/retrieval/local_vector_index.py`
+`src/ai_document_intelligence/retrieval/postgres_vector_index.py`
 
-Proposed components:
+Public components:
 
-- `LocalVectorIndex`: manages local persistence and similarity search.
-- `SearchResult`: immutable record containing passage metadata and
-  its similarity score.
-- `VectorIndexError`: application-level error for index configuration,
-  storage, and vector validation failures.
+- `PostgresVectorIndex`: manages persistence and vector search.
+- `SearchResult`: immutable record containing passage metadata and score.
+- `VectorIndexError`: application-level database and validation exception.
 
-Proposed constructor:
+Use psycopg 3 as the PostgreSQL client. Keep connection details configurable
+through environment variables or an injected connection configuration;
+credentials must not be hard-coded into Python source files.
 
-`LocalVectorIndex(db_path, model_name, embedding_dimension=384)`
-
-Proposed operations:
+The constructor will accept the database connection configuration,
+model name, and embedding dimension.
 
 ### `upsert(passages)`
 
-Accept a sequence of `EmbeddedPassage` objects and insert or update
-their records.
+Accept a sequence of `EmbeddedPassage` objects.
 
 Requirements:
-- Validate all input records before writing.
-- Reject duplicate passage IDs within the same input batch.
-- Require the configured vector dimension.
-- Validate that each vector contains only finite values and has a
-  non-zero norm.
-- Execute the complete batch in a transaction.
-- Roll back the entire batch if any write fails.
+- Validate the entire input batch before writing.
+- Reject duplicate passage IDs within the batch.
+- Validate passage metadata and vectors.
+- Use a single database transaction for the batch.
+- Insert new passages and update existing records with the same passage ID.
+- Roll back the entire batch if any operation fails.
 
 ### `delete_document(document_id)`
 
-Delete all indexed passages belonging to the specified document.
-
-Return the number of deleted passages.
+Delete all passages belonging to the given document and return the number
+of deleted records.
 
 ### `search(query_embedding, top_k=5)`
 
-Accept a query embedding and return up to `top_k` matching passages,
-ranked by cosine similarity in descending order.
+Return up to `top_k` records ranked by cosine similarity.
 
 Requirements:
-- Require a positive `top_k`.
-- Validate query dimension, finiteness, and non-zero norm.
-- Require the query to have been generated in the same embedding space
-  as the index.
-- Return an empty list when the index contains no passages.
-- Use `passage_id` as a stable tie-breaker for equal scores.
-- Return original passage text and provenance with each score.
+- Validate the query vector and `top_k`.
+- Return an empty list for an empty index.
+- Use a stable passage-ID tie-breaker for equal distances.
+- Return the original text and passage provenance.
+- Use parameterized SQL and the pgvector cosine-distance operator.
 
 ### `count()`
 
-Return the number of passages currently stored in the index.
+Return the number of indexed passages.
 
-## 7. Similarity Calculation
+## 7. Configuration and Secrets
 
-For query vector `q` and stored vector `v`, cosine similarity is:
+Use a local `.env` file for PostgreSQL development configuration.
+Provide a `.env.example` file with placeholder values and instructions.
 
-`similarity(q, v) = dot(q, v) / (norm(q) * norm(v))`
+Required settings:
+- PostgreSQL database name.
+- PostgreSQL application username.
+- PostgreSQL password.
+- Host and port.
 
-The initial implementation uses exact cosine similarity for every
-stored passage.
+The `.env` file and actual credentials must remain ignored by Git.
 
-Scores are ordered from highest to lowest. The implementation must
-not assume that injected model outputs are normalized, even though the
-current embedding generator requests normalized embeddings.
-
-This approach provides an exact baseline but requires a scan of the
-stored vectors for each query. Its performance must be measured before
-choosing a more sophisticated indexing method.
+The Compose database must use a persistent named volume and a health check.
+Publish the database port only on the local loopback interface by default.
 
 ## 8. Transaction and Error Handling
 
-- A batch upsert must be atomic.
-- Invalid input must not leave a partially written batch.
-- Existing records must remain unchanged if an upsert fails.
-- Database failures must be reported with useful context.
-- Opening an index with incompatible model metadata must fail clearly.
-- Invalid query vectors must be rejected before similarity ranking.
-- Missing databases may be initialized with the requested configuration.
-- The index must not silently mix embedding dimensions or model spaces.
+- Batch upserts must be atomic.
+- Invalid input must not produce partial writes.
+- Existing rows must remain unchanged when a batch rolls back.
+- Database connection and query errors must provide useful context.
+- Incompatible schema or embedding metadata must fail clearly.
+- Query vectors with invalid dimensions, non-finite values, or zero norm
+  must be rejected before ranking.
+- Connection resources must be closed or returned to a managed pool.
+- Passwords and connection strings containing secrets must not appear in
+  error messages or logs.
 
 ## 9. Testing Strategy
 
-Unit tests must cover:
-1. Creating a new index.
-2. Persisting passages and reopening the database.
-3. Preserving all passage metadata.
-4. Upserting an existing passage.
-5. Deleting passages by document ID.
-6. Empty index search.
-7. Correct similarity ranking.
-8. Stable ordering for equal scores.
-9. Invalid `top_k`.
-10. Invalid dimensions and non-finite values.
-11. Zero-norm vectors.
-12. Duplicate IDs within an upsert batch.
-13. Atomic rollback when a batch fails.
-14. Model or dimension mismatch when reopening an index.
-15. Counting stored passages.
+Unit tests must cover vector validation, query parameters, ranking
+behavior, and error handling.
 
-Use temporary database paths in tests so test data is not written to
-the repository or to the application's default data directory.
+PostgreSQL integration tests must cover:
+1. Creating the schema and enabling pgvector.
+2. Inserting embedded passages.
+3. Preserving passage metadata.
+4. Reopening the index and retaining data.
+5. Upserting an existing passage.
+6. Deleting passages by document ID.
+7. Empty-index search.
+8. Correct cosine-similarity ranking.
+9. Stable tie-breaking.
+10. Invalid `top_k` and invalid vectors.
+11. Duplicate IDs within a batch.
+12. Atomic rollback on a failed batch.
+13. Model or dimension mismatch.
+14. Counting indexed passages.
+
+Use an isolated test database or schema. Tests must not delete or overwrite
+ordinary development data.
 
 ## 10. Acceptance Criteria
 
 The component is ready when:
-- Embedded passages persist between program executions.
+- PostgreSQL and pgvector work through the documented local setup.
+- Embedded passages persist between application runs.
 - Passage provenance is preserved.
-- Vector encoding and decoding are tested.
-- Upserts and document deletion work correctly.
-- Similarity ranking is correct and deterministic.
-- Invalid data and incompatible configurations fail clearly.
-- Batch operations are transactional.
-- Unit tests cover success and failure paths.
+- Exact cosine-similarity search is correct and deterministic.
+- Upserts are transactional.
+- Document deletion works correctly.
+- Invalid data and incompatible configuration fail clearly.
+- PostgreSQL integration tests pass.
 - Ruff, pytest, and dependency checks pass.
-- No generated database, private PDF, or embedding vector data is
-  committed.
+- No database files, private documents, or secrets are committed.
 
 ## 11. Performance and Future Work
 
-The initial implementation uses exact search over locally stored
-vectors. It is intended as a correctness baseline for local corpora.
+Start with exact cosine-distance search to establish a correctness baseline.
 
-Future work may evaluate:
-- Query latency as the corpus grows.
-- Batch loading and database read performance.
-- Specialized vector indexes such as FAISS or HNSW-based solutions.
-- Incremental re-indexing and document replacement.
-- Retrieval quality using a controlled question-and-evidence dataset.
+Measure retrieval latency as the corpus grows. Add a pgvector HNSW index
+only after the baseline is correct and performance measurements justify it.
 
-A specialized vector index must be introduced only after performance
-measurement demonstrates a need and an explicit design decision is made.
+Future work may include:
+- HNSW indexing and recall/latency evaluation.
+- Query latency and throughput benchmarks.
+- Incremental document re-indexing.
+- Retrieval evaluation against a question-and-evidence dataset.
+- Deployment behind an application API.
 
 ## 12. Integration with Existing Components
 
-The intended processing flow is:
+The intended flow is:
 
 1. Extract PDF text.
 2. Chunk text into provenance-preserving `Passage` objects.
-3. Generate `EmbeddedPassage` objects using `EmbeddingGenerator`.
-4. Persist the embedded passages using `LocalVectorIndex`.
-5. Embed a user query using the same embedding model.
-6. Search the index and return ranked passages with source metadata.
+3. Generate `EmbeddedPassage` objects with `EmbeddingGenerator`.
+4. Persist embedded passages through `PostgresVectorIndex`.
+5. Embed a user query using the same model configuration.
+6. Search PostgreSQL and return ranked passages with source metadata.
 
-Query embedding and grounded answer generation are consumers of this
-index; they are not implemented by the storage component itself.
+Query embedding and grounded answer generation remain separate components.
