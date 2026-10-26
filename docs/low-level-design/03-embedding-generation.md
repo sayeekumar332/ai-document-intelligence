@@ -164,10 +164,51 @@ The project declares:
 
 This version range constrains the dependency to the 5.x major release line. The implementation has been tested locally with Python 3.12 and Sentence Transformers 5.7.0 on Apple Silicon. Compatibility should be revalidated when dependency versions or the target environment change.
 
-## 12. Future Work
+## 12. Integration with Vector Retrieval
 
-After this component is verified:
-1. Design and implement a local vector index.
-2. Implement semantic retrieval with source metadata.
-3. Evaluate retrieval against a controlled question-and-evidence dataset.
-4. Add grounded answer generation and explicit handling of insufficient evidence.
+The embedding-generation component produces `EmbeddedPassage` records.
+It does not persist vectors, perform similarity search, or generate answers.
+
+The downstream vector-index design is documented in:
+
+`docs/low-level-design/04-local-vector-index.md`
+
+That design specifies PostgreSQL with pgvector for persistent passage
+storage and cosine-similarity retrieval.
+
+### Intended integration flow
+
+1. Extract PDF text and create provenance-preserving `Passage` objects.
+2. Generate `EmbeddedPassage` records using `EmbeddingGenerator`.
+3. Pass the embedded passages to `PostgresVectorIndex` for persistence.
+4. Generate an embedding for a user's query using the same configured
+   model and compatible embedding settings.
+5. Search the vector index and return ranked passages with their original
+   text, document identifiers, source filenames, and page numbers.
+6. Supply retrieved evidence to a separately implemented answer-generation
+   component.
+
+### Embedding-space compatibility
+
+The current `EmbeddedPassage` record does not contain a model identifier
+or model revision. The vector index therefore cannot independently prove
+which model produced each incoming vector.
+
+The calling application is responsible for ensuring that stored passage
+vectors and query vectors belong to the same configured embedding space.
+Changing the model or embedding dimension requires explicit index
+configuration and compatibility handling.
+
+### Subsequent work
+
+- Complete and verify integration with PostgreSQL and pgvector.
+- Provide a query-embedding workflow using the same configured model.
+- Evaluate semantic retrieval against a controlled question-and-evidence
+  dataset.
+- Measure exact-search latency before considering approximate indexing,
+  such as pgvector HNSW.
+- Add grounded answer generation and explicit handling of insufficient
+  or conflicting evidence.
+
+These capabilities belong to downstream retrieval and answer-generation
+components; they are not responsibilities of `EmbeddingGenerator`.

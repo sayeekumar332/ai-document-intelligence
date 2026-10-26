@@ -2,74 +2,186 @@
 
 ## 1. Purpose
 
-Build a local-first application that allows users to ask questions about PDF documents and receive answers grounded in retrieved document evidence.
+Build a local-first application that allows users to ask questions about
+PDF documents and receive answers grounded in retrieved document evidence.
+
+The system must preserve source-document and page-level provenance throughout
+the processing pipeline so that answers can be traced back to their evidence.
 
 ## 2. Primary Objectives
 
-- Extract text from PDF documents while preserving page-level source information.
+- Extract text from PDF documents while preserving page numbers.
 - Divide extracted content into searchable passages.
-- Retrieve passages relevant to a user's question.
+- Generate semantic embeddings locally.
+- Persist passage metadata and embeddings in PostgreSQL using pgvector.
+- Retrieve passages relevant to a user's question using vector similarity.
 - Generate answers grounded in retrieved evidence.
-- Display citations that identify the source document and page.
-- Handle invalid documents and insufficient evidence explicitly.
-- Evaluate extraction, retrieval, and answer quality through automated tests and a controlled evaluation corpus.
+- Display citations identifying the source document and page.
+- Handle invalid documents and insufficient or conflicting evidence explicitly.
+- Evaluate extraction, retrieval, and answer quality through automated tests
+  and a controlled evaluation corpus.
+- Provide a Python API and, in a later phase, a simple user interface.
 
 ## 3. System Scope
 
-The initial implementation targets text-based PDFs. Scanned PDFs requiring optical character recognition are outside the first implementation scope unless added through a later design decision.
+The initial implementation targets text-based PDFs. Scanned PDFs requiring
+optical character recognition (OCR) are outside the initial scope unless
+introduced through a later design decision.
 
-The first feature is PDF text extraction. Subsequent components will be implemented incrementally.
+The platform is developed incrementally. PDF extraction, passage chunking,
+and embedding generation form the ingestion pipeline. PostgreSQL with
+pgvector provides persistent vector storage and semantic search.
 
-## 4. Proposed Technology Stack
+Query processing, grounded answer generation, the API, and the user interface
+are subsequent milestones.
+
+## 4. Technology Stack
 
 | Component | Technology |
 |---|---|
 | Programming language | Python 3.12 |
 | PDF extraction | PyMuPDF |
-| Embeddings | sentence-transformers |
-| Search index | FAISS or a justified local alternative |
-| Language model runtime | Ollama |
-| Backend API | FastAPI |
-| Testing | pytest |
-| Linting and formatting | Ruff |
+| Passage chunking | Python |
+| Embedding generation | Sentence Transformers with PyTorch |
+| Initial embedding model | sentence-transformers/all-MiniLM-L6-v2 |
+| Embedding dimension | 384 |
+| Relational database | PostgreSQL 17 |
+| Vector operations | pgvector |
+| Local database environment | Docker Compose |
+| PostgreSQL client | Psycopg 3 |
+| Unit and integration testing | pytest |
+| Linting and code checks | Ruff |
+| Future language model runtime | Ollama |
+| Future backend API | FastAPI |
 | Continuous integration | GitHub Actions |
 
-## 5. High-Level Processing Flow
+PostgreSQL stores passage metadata and embeddings. pgvector supplies the
+native vector type and similarity operators.
+
+The initial retrieval implementation uses exact cosine-similarity search.
+Approximate nearest-neighbor indexing, such as HNSW, may be introduced after
+correctness is established and performance measurements justify it.
+
+## 5. High-Level Architecture
+
+The platform consists of the following logical components:
+
+### 5.1 Document ingestion
+
+Accept a PDF document, validate that it can be processed, and extract its
+text page by page.
+
+### 5.2 Passage chunking
+
+Divide extracted page text into passages while preserving the document ID,
+source filename, and original one-based page number.
+
+### 5.3 Embedding generation
+
+Generate a numerical embedding for each passage using the configured local
+Sentence Transformers model. Preserve the passage text and provenance in
+each embedding result.
+
+### 5.4 Vector storage and retrieval
+
+Persist embedded passages in PostgreSQL using pgvector. Retrieve the most
+similar passages for a query and return their text, similarity scores, and
+source metadata.
+
+The initial design keeps exact similarity search as a correctness baseline.
+Index optimization is a separate performance decision.
+
+### 5.5 Evidence-grounded answer generation
+
+A future answer-generation component will consume retrieved passages, assess
+whether sufficient evidence is available, and generate an answer supported
+by the supplied evidence.
+
+It must explicitly handle insufficient or conflicting evidence rather than
+present unsupported claims as document facts.
+
+### 5.6 API and user interface
+
+Future components will expose document ingestion and question-answering
+operations through an API and a simple user interface.
+
+These components must preserve the separation between ingestion, retrieval,
+and answer generation.
+
+## 6. High-Level Processing Flow
+
+The intended end-to-end workflow is:
 
 1. Accept a PDF document.
 2. Validate that the document can be opened and processed.
 3. Extract text page by page and preserve page numbers.
 4. Divide extracted text into passages while retaining source metadata.
-5. Generate embeddings and index the passages.
-6. Retrieve passages relevant to a user question.
-7. Determine whether the retrieved evidence is sufficient.
-8. Generate an evidence-grounded answer.
-9. Return the answer with document and page citations.
+5. Generate embeddings for the passages.
+6. Store the passages, metadata, and vectors in PostgreSQL with pgvector.
+7. Embed a user's question using the same configured embedding model.
+8. Retrieve and rank relevant passages using vector similarity.
+9. Determine whether the retrieved evidence is sufficient.
+10. Generate an evidence-grounded answer when answer generation is available.
+11. Return the answer with source-document and page citations.
 
-## 6. Failure and Evidence Requirements
+The ingestion and retrieval components remain independently testable.
+
+## 7. Failure and Evidence Requirements
 
 - Invalid or unreadable PDFs must produce a clear error.
 - PDFs with no extractable text must not be treated as successfully extracted.
 - Page numbers must remain associated with their source text.
+- Passage IDs must remain stable for the same input and chunking configuration.
+- Stored vectors and query embeddings must use compatible model settings.
+- Invalid vectors and incompatible index configuration must be rejected.
+- Database write failures must not leave partially written batches.
 - Answers must not present unsupported claims as document facts.
 - Insufficient or conflicting evidence must be handled explicitly.
+- Retrieved evidence must retain enough provenance to support source citations.
 
-## 7. Privacy and Reproducibility
+## 8. Privacy and Reproducibility
 
-The application is intended to process documents locally by default. User documents, secrets, virtual environments, caches, and generated artifacts must not be committed to Git.
+The application is intended to process documents and generate embeddings
+locally by default. The initial database runs locally through Docker Compose.
 
-Dependencies, configuration, and tests must be documented so that development and verification can be reproduced.
+- Database credentials must be supplied through local environment settings.
+- Actual `.env` files must not be committed.
+- The development database and integration-test database must remain separate.
+- Private PDFs must remain outside version control.
+- Model weights, generated vectors, database files, and caches must not
+  be committed.
+- Database integration tests must use the dedicated test database.
+- Dependencies, environment setup, and verification commands must be documented.
+- Database volumes must be preserved unless data deletion is intentional.
 
-## 8. Implementation Sequence
+## 9. Implementation Sequence
 
-1. PDF extraction and validation
-2. Passage chunking and source metadata
-3. Embedding generation and indexing
-4. Evidence retrieval
-5. Grounded answer generation
-6. API and user interface
-7. Evaluation, continuous integration, and documentation
+1. PDF extraction and validation.
+2. Passage chunking and source metadata preservation.
+3. Local embedding generation.
+4. PostgreSQL and pgvector configuration.
+5. Persistent vector indexing and exact similarity search.
+6. Query embedding and retrieval evaluation.
+7. Evidence-grounded answer generation.
+8. API and user interface.
+9. Evaluation, continuous integration, and documentation refinement.
 
-## 9. Acceptance Principles
+Each milestone should be designed, implemented, tested, and reviewed before
+being integrated into the main branch.
 
-Each component must have a defined interface and automated tests. The application must preserve source traceability and demonstrate its behavior on both answerable questions and questions for which the document provides insufficient evidence.
+## 10. Acceptance Principles
+
+Each component must have a documented interface and automated tests.
+
+The platform must:
+- Preserve source traceability throughout ingestion and retrieval.
+- Persist embeddings and passage metadata reliably.
+- Return relevant passages with deterministic ranking behavior.
+- Handle malformed input, incompatible configuration, and database failures.
+- Demonstrate retrieval behavior on both answerable and insufficient-evidence
+  questions before grounded answer generation is considered complete.
+- Keep secrets and private data outside version control.
+- Provide reproducible development and verification instructions.
+
+Detailed contracts and testing requirements are maintained in the low-level
+design documents.
