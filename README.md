@@ -22,12 +22,16 @@ page-level provenance.
   `sentence-transformers/all-MiniLM-L6-v2` (384 dimensions).
 - **Vector storage and search:** PostgreSQL with pgvector, using exact
   cosine-similarity search as the initial retrieval baseline.
+- **Semantic retrieval:** query embedding, ranked passage retrieval, optional
+  document-level filtering, and duplicate-text suppression.
 - **Testing:** pytest unit and integration tests.
 - **Code quality:** Ruff lint checks.
 
-The implementation is developed incrementally. Query processing,
-evidence-grounded answer generation, the API, and the user interface remain
-subsequent milestones.
+Query embedding and semantic retrieval are implemented as reusable
+Python components. Evidence-grounded answer generation, a user-facing API,
+and the user interface remain subsequent milestones. The retrieval service
+does not itself generate answers or establish whether retrieved evidence is
+sufficient to answer a question.
 
 ## Technology Stack
 
@@ -69,6 +73,7 @@ generated embedding vectors.
 - [Passage chunking](docs/low-level-design/02-passage-chunking.md)
 - [Embedding generation](docs/low-level-design/03-embedding-generation.md)
 - [PostgreSQL vector index](docs/low-level-design/04-local-vector-index.md)
+- [Semantic retrieval service](docs/low-level-design/05-semantic-retrieval.md)
 
 ## Verification
 

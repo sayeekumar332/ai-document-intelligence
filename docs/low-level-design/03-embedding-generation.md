@@ -199,16 +199,20 @@ vectors and query vectors belong to the same configured embedding space.
 Changing the model or embedding dimension requires explicit index
 configuration and compatibility handling.
 
-### Subsequent work
+### Downstream work
 
-- Complete and verify integration with PostgreSQL and pgvector.
-- Provide a query-embedding workflow using the same configured model.
-- Evaluate semantic retrieval against a controlled question-and-evidence
-  dataset.
+- Continue evaluating semantic retrieval against a controlled
+  question-and-evidence dataset.
 - Measure exact-search latency before considering approximate indexing,
   such as pgvector HNSW.
 - Add grounded answer generation and explicit handling of insufficient
   or conflicting evidence.
+
+Query embedding is implemented through `EmbeddingGenerator.embed_query()`.
+The retrieval service uses this method to embed user queries with the same
+configured model used for passage embeddings. The caller remains responsible
+for ensuring stored passage vectors and query vectors use compatible
+embedding settings.
 
 These capabilities belong to downstream retrieval and answer-generation
 components; they are not responsibilities of `EmbeddingGenerator`.

@@ -18,6 +18,7 @@ ranked passages with their original source metadata.
 - Insert or update passages transactionally.
 - Delete passages belonging to a document.
 - Search by cosine distance.
+- Optionally restrict search to a specified document ID.
 - Return ranked passages with provenance and similarity scores.
 - Validate embedding dimensions, numerical values, and query parameters.
 - Preserve data between application executions.
@@ -167,13 +168,19 @@ Requirements:
 Delete all passages belonging to the given document and return the number
 of deleted records.
 
-### `search(query_embedding, top_k=5)`
+### `search(query_embedding, top_k=5, document_id=None)`
 
-Return up to `top_k` records ranked by cosine similarity.
+Return up to `top_k` records ranked by cosine similarity. When `document_id`
+is provided, search only passages belonging to that document. The filter is
+applied in the database query before ranking and limiting results. When it is
+omitted, search across all indexed documents.
 
 Requirements:
 - Validate the query vector and `top_k`.
-- Return an empty list for an empty index.
+- Validate `document_id` when provided.
+- Apply the optional document filter in parameterized SQL before ranking and
+  limiting results.
+- Return an empty list when no rows match the search.
 - Use a stable passage-ID tie-breaker for equal distances.
 - Return the original text and passage provenance.
 - Use parameterized SQL and the pgvector cosine-distance operator.
@@ -274,4 +281,8 @@ The intended flow is:
 5. Embed a user query using the same model configuration.
 6. Search PostgreSQL and return ranked passages with source metadata.
 
-Query embedding and grounded answer generation remain separate components.
+Query embedding is implemented in `EmbeddingGenerator.embed_query()`,
+and orchestration of query embedding with vector search is implemented in
+`RetrievalService`. Grounded answer generation remains a separate future
+component. See
+`docs/low-level-design/05-semantic-retrieval.md` for the retrieval contract.
