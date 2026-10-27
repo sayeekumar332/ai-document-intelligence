@@ -153,3 +153,52 @@ def test_source_text_is_not_mutated() -> None:
     chunk_document(document)
 
     assert document.pages[0].text == original_text
+
+
+def test_prefers_paragraph_boundary() -> None:
+    text = ("First paragraph sentence. " * 12).strip()
+    text += "\n\n"
+    text += ("Second paragraph sentence. " * 20).strip()
+
+    passages = chunk_document(
+        make_document(text),
+        max_chars=400,
+        overlap_chars=40,
+    )
+
+    assert len(passages) > 1
+    assert len(passages[0].text) <= 400
+    assert passages[0].text.endswith("\n\n")
+
+
+def test_prefers_sentence_boundary_when_no_paragraph_boundary_exists() -> None:
+    text = ("A complete sentence. " * 30).strip()
+
+    passages = chunk_document(
+        make_document(text),
+        max_chars=200,
+        overlap_chars=20,
+    )
+
+    assert len(passages) > 1
+    assert passages[0].text.rstrip().endswith(".")
+
+
+def test_boundary_selection_preserves_all_source_characters() -> None:
+    text = (
+        "First sentence. Second sentence.\n\n"
+        "Third sentence continues here. Fourth sentence ends here."
+    )
+
+    passages = chunk_document(
+        make_document(text),
+        max_chars=35,
+        overlap_chars=8,
+    )
+
+    reconstructed = "".join(
+        passage.text if index == 0 else passage.text[8:]
+        for index, passage in enumerate(passages)
+    )
+
+    assert reconstructed == text

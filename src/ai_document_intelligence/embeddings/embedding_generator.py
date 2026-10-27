@@ -87,6 +87,72 @@ class EmbeddingGenerator:
 
         return self._model
 
+    def embed_query(self, query: str) -> tuple[float, ...]:
+        """Embed a single query using the configured passage embedding model."""
+        if not isinstance(query, str) or not query.strip():
+            raise EmbeddingGenerationError(
+                "Query must be a non-empty string."
+            )
+
+        model = self._get_model()
+
+        try:
+            vectors = model.encode(
+                [query],
+                batch_size=self.batch_size,
+                convert_to_numpy=True,
+                normalize_embeddings=True,
+                show_progress_bar=False,
+            )
+        except Exception as exc:
+            raise EmbeddingGenerationError(
+                f"Query embedding failed using {self.model_name!r}: {exc}"
+            ) from exc
+
+        try:
+            rows = list(vectors)
+        except (TypeError, ValueError) as exc:
+            raise EmbeddingGenerationError(
+                "The query embedding model returned an invalid result."
+            ) from exc
+
+        if len(rows) != 1:
+            raise EmbeddingGenerationError(
+                f"Expected 1 query embedding vector, received {len(rows)}."
+            )
+
+        return self._validate_vector(
+            rows[0],
+            label="Query embedding",
+        )
+
+    def _validate_vector(
+        self,
+        row: object,
+        *,
+        label: str,
+    ) -> tuple[float, ...]:
+        """Convert and validate one embedding vector."""
+        try:
+            vector = tuple(float(value) for value in row)
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise EmbeddingGenerationError(
+                f"{label} contains an invalid vector."
+            ) from exc
+
+        if len(vector) != self.expected_dimension:
+            raise EmbeddingGenerationError(
+                f"{label} has dimension {len(vector)}; "
+                f"expected {self.expected_dimension}."
+            )
+
+        if not all(isfinite(value) for value in vector):
+            raise EmbeddingGenerationError(
+                f"{label} contains a non-finite value."
+            )
+
+        return vector
+
     def generate(
         self,
         passages: Sequence[Passage],
@@ -131,24 +197,10 @@ class EmbeddingGenerator:
         results: list[EmbeddedPassage] = []
 
         for passage, row in zip(passages, rows, strict=True):
-            try:
-                vector = tuple(float(value) for value in row)
-            except (TypeError, ValueError, OverflowError) as exc:
-                raise EmbeddingGenerationError(
-                    f"Invalid embedding vector for passage {passage.passage_id!r}."
-                ) from exc
-
-            if len(vector) != self.expected_dimension:
-                raise EmbeddingGenerationError(
-                    f"Passage {passage.passage_id!r} has embedding dimension "
-                    f"{len(vector)}; expected {self.expected_dimension}."
-                )
-
-            if not all(isfinite(value) for value in vector):
-                raise EmbeddingGenerationError(
-                    f"Embedding for passage {passage.passage_id!r} "
-                    "contains a non-finite value."
-                )
+            vector = self._validate_vector(
+                row,
+                label=f"Embedding for passage {passage.passage_id!r}",
+            )
 
             results.append(
                 EmbeddedPassage(

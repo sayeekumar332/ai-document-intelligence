@@ -28,3 +28,9 @@ artifacts/
 
 # Generated Python package metadata
 *.egg-info/
+
+# Local smoke tests and temporary retrieval experiments
+.tmp/
+
+# Local backup files
+*.bak

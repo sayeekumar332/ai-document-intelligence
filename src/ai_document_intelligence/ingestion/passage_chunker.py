@@ -20,6 +20,41 @@ class Passage:
     text: str
 
 
+def _select_boundary(text: str, start: int, end: int) -> int:
+    """Select a paragraph, sentence, or whitespace boundary when possible."""
+    minimum_boundary = start + (end - start) // 2
+    candidate = text[minimum_boundary:end]
+
+    # Prefer paragraph separators, retaining their original characters.
+    paragraph_positions = [
+        minimum_boundary + match
+        for match in range(len(candidate))
+        if candidate.startswith("\n\n", match)
+    ]
+    if paragraph_positions:
+        return paragraph_positions[-1] + 2
+
+    # Prefer sentence-ending punctuation followed by whitespace.
+    sentence_positions = [
+        minimum_boundary + index + 1
+        for index, character in enumerate(candidate[:-1])
+        if character in ".!?" and candidate[index + 1].isspace()
+    ]
+    if sentence_positions:
+        return sentence_positions[-1]
+
+    # Fall back to the last whitespace boundary in the permitted window.
+    whitespace_positions = [
+        index
+        for index in range(minimum_boundary, end)
+        if text[index].isspace()
+    ]
+    if whitespace_positions:
+        return whitespace_positions[-1] + 1
+
+    return end
+
+
 def chunk_document(
     document: ExtractedDocument,
     max_chars: int = 800,
@@ -27,8 +62,9 @@ def chunk_document(
 ) -> list[Passage]:
     """Split each page into deterministic, overlapping passages."""
     if max_chars <= 0:
-        raise InvalidChunkingConfigurationError("max_chars must be greater than zero.")
-
+        raise InvalidChunkingConfigurationError(
+            "max_chars must be greater than zero."
+        )
     if overlap_chars < 0 or overlap_chars >= max_chars:
         raise InvalidChunkingConfigurationError(
             "overlap_chars must be non-negative and less than max_chars."
@@ -38,7 +74,6 @@ def chunk_document(
 
     for page in document.pages:
         text = page.text
-
         if not text.strip():
             continue
 
@@ -49,18 +84,7 @@ def chunk_document(
             end = min(start + max_chars, len(text))
 
             if end < len(text):
-                minimum_boundary = start + max_chars // 2
-                whitespace_boundary = max(
-                    (
-                        index
-                        for index in range(minimum_boundary, end)
-                        if text[index].isspace()
-                    ),
-                    default=None,
-                )
-
-                if whitespace_boundary is not None:
-                    end = whitespace_boundary + 1
+                end = _select_boundary(text, start, end)
 
             passage_text = text[start:end]
 
@@ -68,7 +92,6 @@ def chunk_document(
                 passage_id = (
                     f"{document.document_id}:p{page.page_number}:c{page_passage_index}"
                 )
-
                 passages.append(
                     Passage(
                         passage_id=passage_id,

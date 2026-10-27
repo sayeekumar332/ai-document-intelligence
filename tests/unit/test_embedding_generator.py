@@ -222,3 +222,57 @@ def test_offline_mode_is_forwarded_to_model_loader(
         device=None,
         local_files_only=True,
     )
+
+def test_embed_query_returns_validated_vector() -> None:
+    model = FakeEmbeddingModel([[0.6, 0.8]])
+    generator = EmbeddingGenerator(model=model, expected_dimension=2)
+
+    result = generator.embed_query("What is the control unit?")
+
+    assert result == (0.6, 0.8)
+    assert model.calls[0]["sentences"] == ["What is the control unit?"]
+    assert model.calls[0]["normalize_embeddings"] is True
+    assert model.calls[0]["show_progress_bar"] is False
+
+
+@pytest.mark.parametrize("query", ["", "  ", "\n\t", None, 123])
+def test_embed_query_rejects_invalid_input_without_encoding(
+    query: object,
+) -> None:
+    model = FakeEmbeddingModel([])
+    generator = EmbeddingGenerator(model=model, expected_dimension=2)
+
+    with pytest.raises(EmbeddingGenerationError, match="non-empty string"):
+        generator.embed_query(query)  # type: ignore[arg-type]
+
+    assert model.calls == []
+
+
+def test_embed_query_rejects_wrong_dimension() -> None:
+    model = FakeEmbeddingModel([[1.0, 0.0, 0.5]])
+    generator = EmbeddingGenerator(model=model, expected_dimension=2)
+
+    with pytest.raises(EmbeddingGenerationError, match="dimension 3"):
+        generator.embed_query("A query")
+
+
+@pytest.mark.parametrize("bad_value", [float("nan"), float("inf"), -float("inf")])
+def test_embed_query_rejects_non_finite_values(bad_value: float) -> None:
+    model = FakeEmbeddingModel([[bad_value, 0.0]])
+    generator = EmbeddingGenerator(model=model, expected_dimension=2)
+
+    with pytest.raises(EmbeddingGenerationError, match="non-finite"):
+        generator.embed_query("A query")
+
+
+def test_passage_and_query_embedding_reuse_the_same_model() -> None:
+    model = FakeEmbeddingModel([[0.6, 0.8]])
+    generator = EmbeddingGenerator(model=model, expected_dimension=2)
+
+    passage_result = generator.generate([make_passage()])
+    query_result = generator.embed_query("A query")
+
+    assert passage_result[0].embedding == query_result == (0.6, 0.8)
+    assert len(model.calls) == 2
+    assert model.calls[0]["sentences"] == ["Example technical passage."]
+    assert model.calls[1]["sentences"] == ["A query"]
