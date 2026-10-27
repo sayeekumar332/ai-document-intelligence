@@ -426,10 +426,18 @@ class PostgresVectorIndex:
         self,
         query_embedding: Sequence[float],
         top_k: int = 5,
+        document_id: str | None = None,
     ) -> list[SearchResult]:
-        """Return passages ranked by exact cosine similarity."""
+        """Return cosine-ranked passages, optionally scoped to a document."""
         if isinstance(top_k, bool) or not isinstance(top_k, int) or top_k <= 0:
             raise VectorIndexError("top_k must be a positive integer.")
+
+        if document_id is not None and (
+            not isinstance(document_id, str) or not document_id.strip()
+        ):
+            raise VectorIndexError(
+                "document_id must be a non-empty string when provided."
+            )
 
         values = self._validate_vector(
             query_embedding,
@@ -438,8 +446,7 @@ class PostgresVectorIndex:
         query_vector = Vector(list(values))
 
         with self._connection() as connection:
-            rows = connection.execute(
-                """
+            sql = """
                 SELECT
                     passage_id,
                     document_id,
@@ -448,11 +455,27 @@ class PostgresVectorIndex:
                     text,
                     1 - (embedding <=> %s) AS score
                 FROM public.passages
-                ORDER BY embedding <=> %s, passage_id
-                LIMIT %s
-                """,
-                (query_vector, query_vector, top_k),
-            ).fetchall()
+            """
+            if document_id is None:
+                sql += """
+                    ORDER BY embedding <=> %s, passage_id
+                    LIMIT %s
+                """
+                parameters = (query_vector, query_vector, top_k)
+            else:
+                sql += """
+                    WHERE document_id = %s
+                    ORDER BY embedding <=> %s, passage_id
+                    LIMIT %s
+                """
+                parameters = (
+                    query_vector,
+                    document_id,
+                    query_vector,
+                    top_k,
+                )
+
+            rows = connection.execute(sql, parameters).fetchall()
 
         return [
             SearchResult(

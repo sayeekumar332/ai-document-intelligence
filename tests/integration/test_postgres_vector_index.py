@@ -260,6 +260,64 @@ def test_delete_document_only_removes_that_documents_passages(
     )
 
 
+
+def test_search_can_be_scoped_to_one_document(
+    vector_index: PostgresVectorIndex,
+) -> None:
+    vector_index.upsert(
+        [
+            make_passage(
+                "doc-a-match",
+                (0.8, 0.6, 0.0),
+                document_id="doc-a",
+                text="Passage from document A.",
+            ),
+            make_passage(
+                "doc-b-best-global-match",
+                (1.0, 0.0, 0.0),
+                document_id="doc-b",
+                text="Passage from document B.",
+            ),
+            make_passage(
+                "doc-a-second",
+                (0.0, 1.0, 0.0),
+                document_id="doc-a",
+                text="Another passage from document A.",
+            ),
+        ]
+    )
+
+    global_results = vector_index.search((1.0, 0.0, 0.0), top_k=3)
+    assert global_results[0].passage_id == "doc-b-best-global-match"
+
+    scoped_results = vector_index.search(
+        (1.0, 0.0, 0.0),
+        top_k=3,
+        document_id="doc-a",
+    )
+    assert scoped_results
+    assert all(result.document_id == "doc-a" for result in scoped_results)
+    assert {result.passage_id for result in scoped_results} == {
+        "doc-a-match",
+        "doc-a-second",
+    }
+
+
+@pytest.mark.parametrize("document_id", ["", "  ", "\n", 123, False])
+def test_search_rejects_invalid_document_id(
+    vector_index: PostgresVectorIndex,
+    document_id: object,
+) -> None:
+    with pytest.raises(
+        VectorIndexError,
+        match="document_id must be a non-empty string",
+    ):
+        vector_index.search(
+            (1.0, 0.0, 0.0),
+            document_id=document_id,  # type: ignore[arg-type]
+        )
+
+
 def test_invalid_query_parameters_are_rejected(
     vector_index: PostgresVectorIndex,
 ) -> None:
