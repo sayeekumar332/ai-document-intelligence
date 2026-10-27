@@ -32,8 +32,10 @@ The platform is developed incrementally. PDF extraction, passage chunking,
 and embedding generation form the ingestion pipeline. PostgreSQL with
 pgvector provides persistent vector storage and semantic search.
 
-Query processing, grounded answer generation, the API, and the user interface
-are subsequent milestones.
+Query embedding and semantic retrieval are implemented components.
+Evidence-grounded answer generation, the API, and the user interface remain
+subsequent milestones. The retrieval service is not yet an end-to-end
+question-answering application.
 
 ## 4. Technology Stack
 
@@ -84,12 +86,19 @@ each embedding result.
 
 ### 5.4 Vector storage and retrieval
 
-Persist embedded passages in PostgreSQL using pgvector. Retrieve the most
-similar passages for a query and return their text, similarity scores, and
-source metadata.
+Persist embedded passages in PostgreSQL using pgvector. The implemented
+`PostgresVectorIndex` performs exact cosine-distance search and returns ranked
+passages with their text, similarity scores, and source metadata. Search can
+optionally be restricted to a single document using `document_id`.
 
-The initial design keeps exact similarity search as a correctness baseline.
-Index optimization is a separate performance decision.
+The `RetrievalService` embeds a non-empty user query with the configured
+`EmbeddingGenerator`, requests an expanded candidate set from the vector
+index, and suppresses duplicate passage text before returning up to `top_k`
+results. Duplicate comparison is case-insensitive and whitespace-normalized;
+the original passage text and provenance are preserved in returned results.
+
+Exact search remains the correctness baseline. Approximate-index optimization
+is a separate performance decision.
 
 ### 5.5 Evidence-grounded answer generation
 
@@ -118,11 +127,15 @@ The intended end-to-end workflow is:
 4. Divide extracted text into passages while retaining source metadata.
 5. Generate embeddings for the passages.
 6. Store the passages, metadata, and vectors in PostgreSQL with pgvector.
-7. Embed a user's question using the same configured embedding model.
-8. Retrieve and rank relevant passages using vector similarity.
-9. Determine whether the retrieved evidence is sufficient.
-10. Generate an evidence-grounded answer when answer generation is available.
-11. Return the answer with source-document and page citations.
+7. Embed a user's query using the same configured embedding model.
+8. Retrieve ranked passages using exact cosine-similarity search, optionally
+   restricted to a selected document.
+9. Suppress duplicate passage text and return up to the requested number of
+   unique results, subject to candidate availability.
+10. In a future milestone, assess evidence sufficiency and generate an
+    evidence-grounded answer.
+11. In a future API or user interface, return the answer with source-document
+    and page citations.
 
 The ingestion and retrieval components remain independently testable.
 
@@ -161,10 +174,14 @@ locally by default. The initial database runs locally through Docker Compose.
 3. Local embedding generation.
 4. PostgreSQL and pgvector configuration.
 5. Persistent vector indexing and exact similarity search.
-6. Query embedding and retrieval evaluation.
-7. Evidence-grounded answer generation.
-8. API and user interface.
-9. Evaluation, continuous integration, and documentation refinement.
+6. Query embedding and semantic retrieval, including optional document-level
+   filtering and duplicate-text suppression.
+7. Retrieval evaluation and refinement using a controlled question-and-
+   evidence dataset.
+8. Evidence-grounded answer generation and explicit handling of insufficient
+   or conflicting evidence.
+9. API and user interface.
+10. Continuous integration and documentation refinement.
 
 Each milestone should be designed, implemented, tested, and reviewed before
 being integrated into the main branch.
