@@ -205,8 +205,8 @@ vector search with lexical/BM25 matching or a reranker in the accepted path.
 ### 5.5 Exact search grows linearly with corpus size in distance work
 
 Without an approximate vector index, an unfiltered query calculates a vector
-distance for each of the (M) stored passages. For fixed vector dimension,
-distance calculation grows linearly with (M); ranking adds sorting work.
+distance for each of the `M` stored passages. For fixed vector dimension,
+distance calculation grows linearly with `M`; ranking adds sorting work.
 This is simple and exact but may become a latency bottleneck as the corpus
 grows.
 
@@ -258,21 +258,21 @@ The estimates below use these symbols:
 
 | Symbol | Meaning |
 |---|---|
-| (P) | Number of PDF pages |
-| (S) | Total characters extracted from the document(s) |
-| (C) | Number of passages produced for ingestion |
-| (M) | Number of passages already stored in the index before a query |
-| (d) | Embedding dimension; 384 in the default configuration |
-| (L) | Token sequence length processed per passage; at most 256 word pieces under the model's default truncation behavior |
-| (H) | Transformer hidden size; 384 for this model family |
-| (A) | Transformer layer count; 6 for MiniLM-L6 |
-| (B) | Embedding batch size; default 32 |
-| (k) | Requested `top_k` |
-| (q) | Number of candidates requested from the index: (max(k, min(4k, 200))) |
+| `P` | Number of PDF pages |
+| `S` | Total characters extracted from the document(s) |
+| `C` | Number of passages produced for ingestion |
+| `M` | Number of passages already stored in the index before a query |
+| `d` | Embedding dimension; 384 in the default configuration |
+| `L` | Token sequence length processed per passage; at most 256 word pieces under the model's default truncation behavior |
+| `H` | Transformer hidden size; 384 for this model family |
+| `A` | Transformer layer count; 6 for MiniLM-L6 |
+| `B` | Embedding batch size; default 32 |
+| `k` | Requested `top_k` |
+| `q` | Number of candidates requested from the index: `max(k, min(4k, 200))` |
 
-The model facts ((d=384), (H=384), (A=6), and the default
+The model facts (`d=384`, `H=384`, `A=6`, and the default
 256-word-piece truncation behavior) are from the model documentation linked
-in Section 2. (L) depends on the actual tokenized text, up to that limit.
+in Section 2. `L` depends on the actual tokenized text, up to that limit.
 These symbols simplify the analysis; model/kernel operations, I/O, and
 database query plans affect wall-clock time.
 
@@ -280,73 +280,73 @@ database query plans affect wall-clock time.
 
 ### 7.1 PDF text extraction
 
-Let (S) be the total extracted text size.
+Let `S` be the total extracted text size.
 
-- **Time:** approximately (O(P + S)) for the high-level page traversal and output construction. Actual PDF parsing cost also depends on file size and internal PDF structure; this is not a formal worst-case bound for PyMuPDF.
-- **Working space:** (O(P + S)) for the returned in-memory page records, excluding parser-internal structures and the PDF file's binary representation.
+- **Time:** approximately `O(P + S)` for the high-level page traversal and output construction. Actual PDF parsing cost also depends on file size and internal PDF structure; this is not a formal worst-case bound for PyMuPDF.
+- **Working space:** `O(P + S)` for the returned in-memory page records, excluding parser-internal structures and the PDF file's binary representation.
 
 ### 7.2 Passage chunking
 
 With the V1 defaults `max_chars = 800` and `overlap_chars = 120`, the
 boundary scan for each chunk is bounded by a fixed-size window.
 
-- **Time:** (O(S)) for fixed chunk and overlap settings.
-- **Output space:** (O(S + C)). Overlap copies some source characters into adjacent passages, so total passage text can exceed (S); (C) additional passage records and IDs are created.
+- **Time:** (O`S`) for fixed chunk and overlap settings.
+- **Output space:** `O(S + C)`. Overlap copies some source characters into adjacent passages, so total passage text can exceed `S`; `C` additional passage records and IDs are created.
 - **Configuration caveat:** the chunk settings are configurable. Very large overlap relative to chunk size can greatly increase the number of iterations and repeated boundary scanning. The linear statement is for the fixed V1 settings, not every possible parameter combination.
 
 ### 7.3 Embedding generation
 
 For a dense Transformer encoder, a standard per-passage operation estimate is:
 
-[
+```text
 O\left(A\left(L^2H + LH^2\right)\right)
-]
+```
 
-The (L^2H) term represents self-attention work, and the (LH^2) term
+The `L^2 H` term represents self-attention work, and the `L H^2` term
 captures dense projection/feed-forward work up to architecture-specific
-constant factors. For (C) passages:
+constant factors. For `C` passages:
 
-[
+```text
 O\left(CA\left(L^2H + LH^2\right)\right)
-]
+```
 
-- **Time:** above operation estimate plus tokenization and vector validation. With the fixed model and bounded input length, (L), (H), and (A) are bounded constants, so the embedding computation is (O(C)) with respect to the number of passages.
-- **Output space:** (O(Cd)) for all generated vectors, in addition to passage text and provenance. The implementation returns all generated embeddings in a list.
-- **Inference working memory:** approximately (O(B(L^2 + LH))) for sequence-dependent activations, with architecture/implementation constants omitted, plus resident model weights and (O(Cd)) for retained outputs. Actual memory depends on PyTorch, device, and batching internals.
+- **Time:** above operation estimate plus tokenization and vector validation. With the fixed model and bounded input length, `L`, `H`, and `A` are bounded constants, so the embedding computation is (O`C`) with respect to the number of passages.
+- **Output space:** `O(Cd)` for all generated vectors, in addition to passage text and provenance. The implementation returns all generated embeddings in a list.
+- **Inference working memory:** approximately `O(B(L^2 + LH))` for sequence-dependent activations, with architecture/implementation constants omitted, plus resident model weights and `O(Cd)` for retained outputs. Actual memory depends on PyTorch, device, and batching internals.
 
 This is an operation-count model, not a prediction of seconds. Neural inference is normally the most computationally expensive ingestion stage, but the relative cost should be confirmed by profiling.
 
 ### 7.4 Validate and upsert embedded passages
 
-For (C) new or updated passages with (d)-dimensional vectors:
+For `C` new or updated passages with `d`-dimensional vectors:
 
-- **Application validation time:** (O(Cd + S_p)), where (S_p) is the total passage-text size being validated/copied.
-- **Database writes:** one transactional batch containing (C) parameterized upserts. With primary-key and document B-tree maintenance, a useful rough growth model is (O(Clog M + Cd + S_p)), excluding database page I/O, locks, WAL, and other PostgreSQL implementation costs.
-- **Application working space:** (O(Cd + S_p)), because the adapter materializes the input sequence and validated records before the transactional write.
+- **Application validation time:** `O(Cd + S_p)`, where `S_p` is the total passage-text size being validated/copied.
+- **Database writes:** one transactional batch containing `C` parameterized upserts. With primary-key and document B-tree maintenance, a useful rough growth model is `O(C log M + Cd + S_p)`, excluding database page I/O, locks, WAL, and other PostgreSQL implementation costs.
+- **Application working space:** `O(Cd + S_p)`, because the adapter materializes the input sequence and validated records before the transactional write.
 - **Persistent space:** passage text, metadata, vectors, table overhead, and indexes grow with the number of stored rows.
 
 The database costs are indicative, not strict bounds on PostgreSQL's internal execution.
 
 ### 7.5 Query embedding
 
-Let (L_q) be the token count for a single query (bounded by the model's
+Let `L_q` be the token count for a single query (bounded by the model's
 default truncation limit).
 
-- **Time:** (O(A(L_q^2H + L_qH^2))), plus tokenization and vector validation.
-- **Output space:** (O(d)) for the query vector.
-- **Working space:** model weights plus query-sequence activations; with a fixed model and one query, this is bounded independently of (M), the corpus size.
+- **Time:** `O(A(L_q^2 H + L_q H^2))`, plus tokenization and vector validation.
+- **Output space:** (O`d`) for the query vector.
+- **Working space:** model weights plus query-sequence activations; with a fixed model and one query, this is bounded independently of `M`, the corpus size.
 
 ### 7.6 Exact cosine retrieval and ranking
 
 The vector index evaluates cosine distance using the SQL expression
 `embedding <=> query_vector` and orders rows by distance, then passage ID.
 
-For (M) considered rows:
+For `M` considered rows:
 
-- **Distance calculations:** (O(Md)).
-- **Ranking:** conservative worst-case bound (O(Mlog M)). When PostgreSQL uses a bounded top-(q) sort for a `LIMIT q` query, ranking can be closer to (O(Mlog q)). The actual sort method depends on the query plan.
-- **Overall query time for index search:** (O(Md + Mlog M)) as a conservative bound. Because (d=384) is fixed, this grows approximately linearly with (M) for fixed result limits, but the ranking and I/O terms matter in practice.
-- **Space:** database execution workspace depends on PostgreSQL's chosen plan and sort method. Returned rows are bounded by (q), giving application result space proportional to (O(q(d + ar{T}))), where (ar{T}) is average returned passage text/metadata size.
+- **Distance calculations:** `O(Md)`.
+- **Ranking:** conservative worst-case bound `O(M log M)`. When PostgreSQL uses a bounded top-`q` sort for a `LIMIT q` query, ranking can be closer to `O(M log q)`. The actual sort method depends on the query plan.
+- **Overall query time for index search:** `O(Md + M log M)` as a conservative bound. Because `d=384` is fixed, this grows approximately linearly with `M` for fixed result limits, but the ranking and I/O terms matter in practice.
+- **Space:** database execution workspace depends on PostgreSQL's chosen plan and sort method. Returned rows are bounded by `q`, giving application result space proportional to (O(q(d + T̄))), where (T̄) is average returned passage text/metadata size.
 
 A document filter can reduce the rows considered when PostgreSQL uses the
 B-tree index on `document_id`; it does not guarantee a particular plan.
@@ -358,11 +358,11 @@ as logarithmic-time retrieval.
 The retrieval service normalizes candidate text and checks a set of already
 seen normalized strings.
 
-- **Time:** expected (O(T_q)), where (T_q) is the total character count of the candidate texts normalized and hashed. The number of candidates is (q), not the full corpus size.
-- **Space:** (O(T_q)) for normalized keys and retained unique results.
+- **Time:** expected (O`T_q`), where `T_q` is the total character count of the candidate texts normalized and hashed. The number of candidates is `q`, not the full corpus size.
+- **Space:** (O`T_q`) for normalized keys and retained unique results.
 
 For a fixed `top_k` of 5, the candidate request is 20; for larger limits the
-candidate request is capped at 200 unless `top_k) itself exceeds 200.
+candidate request is capped at 200 unless `top_k` itself exceeds 200.
 
 ## 8. Overall V1 complexity
 
@@ -374,18 +374,18 @@ document ingestion and each online retrieval query have different costs.
 Ignoring PDF-parser-specific behavior and database I/O, an approximate
 combined model is:
 
-[
+```text
 O\left(
 P + S +
 CA(L^2H + LH^2) +
 C(d + \log M) +
 S_p
 \right)
-]
+```
 
-where (S_p) is the text size in passages after chunking/overlap. Some terms
-overlap in practice (for example, (S_p) is bounded by a constant-factor
-multiple of (S) under the fixed V1 chunk configuration).
+where `S_p` is the text size in passages after chunking/overlap. Some terms
+overlap in practice (for example, `S_p` is bounded by a constant-factor
+multiple of `S` under the fixed V1 chunk configuration).
 
 With fixed chunk parameters and fixed model/token-length bounds, this is
 linear in document text/passages apart from database index-maintenance factors.
@@ -394,30 +394,30 @@ stages to profile first; measurements decide the real bottleneck.
 
 Peak application memory is approximately:
 
-[
+```text
 O\left(S + C(d + \bar{T}) + BL^2\right)
-]
+```
 
-plus the model weights and runtime buffers, where (ar{T}) is average
+plus the model weights and runtime buffers, where (T̄) is average
 passage text/provenance size. The implementation retains the extracted
 document, passage list, and embedding results, so ingestion memory grows with
 document size; it is not a streaming, constant-memory ingestion pipeline.
 
 ### 8.2 One retrieval query
 
-For a query and an unfiltered corpus of (M) passages:
+For a query and an unfiltered corpus of `M` passages:
 
-[
+```text
 O\left(
 A(L_q^2H + L_qH^2) +
 Md + M\log M + T_q
 \right)
-]
+```
 
 This combines query embedding, exact vector-distance evaluation and ranking,
 and candidate deduplication. With the default model and fixed result limit,
 the corpus-dependent term is dominated by the exact scan/ranking and grows
-with (M). The query embedding cost does not grow with corpus size.
+with `M`. The query embedding cost does not grow with corpus size.
 
 Query working memory includes the model's activation memory, PostgreSQL's
 plan-dependent sort/work memory, and the returned candidate text/results.
@@ -425,15 +425,15 @@ Persistent database storage is separate from per-query working memory.
 
 ### 8.3 Persistent database space
 
-For (M) stored passages, embedding dimension (d), and average stored
-passage text size (ar{T}):
+For `M` stored passages, embedding dimension `d`, and average stored
+passage text size (T̄):
 
-[
+```text
 O\left(M(d + \bar{T})\right)
-]
+```
 
 This excludes indexes, tuple/page overhead, WAL, dead tuples pending vacuum,
-metadata, and PostgreSQL's other storage overhead. With (d=384), the vector
+metadata, and PostgreSQL's other storage overhead. With `d=384`, the vector
 component per passage is fixed-size in the current configuration; text and
 database overhead also contribute materially.
 
