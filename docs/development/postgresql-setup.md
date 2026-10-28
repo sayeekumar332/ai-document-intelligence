@@ -3,6 +3,10 @@
 This guide documents the PostgreSQL environment used by the AI Document
 Intelligence project on macOS with Apple Silicon.
 
+For SQL commands used by the application and for schema inspection, metadata,
+passage diagnostics, and vector-search SQL patterns, see the
+[PostgreSQL SQL command reference](postgresql-sql-reference.md).
+
 ## 1. Prerequisites
 
 The verified environment uses:

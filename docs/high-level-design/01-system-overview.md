@@ -97,6 +97,14 @@ index, and suppresses duplicate passage text before returning up to `top_k`
 results. Duplicate comparison is case-insensitive and whitespace-normalized;
 the original passage text and provenance are preserved in returned results.
 
+The V1 retrieval evaluation record is preserved in
+`docs/development/retrieval-evaluation-v1/`. It records an eight-question
+benchmark and diagnostic Precision@5, judged-relevant Recall@5, and nDCG@5
+results. The relevance judgments are provisional and unvalidated; these
+scores are not claims of production retrieval quality. Future versions should
+compare against this record with the same benchmark and metric definitions,
+document changes to judgments or data, and report regressions as well as gains.
+
 Exact search remains the correctness baseline. Approximate-index optimization
 is a separate performance decision.
 
@@ -197,6 +205,9 @@ The platform must:
 - Handle malformed input, incompatible configuration, and database failures.
 - Demonstrate retrieval behavior on both answerable and insufficient-evidence
   questions before grounded answer generation is considered complete.
+- Preserve a versioned retrieval-evaluation baseline, disclose judgment
+  limitations, and avoid presenting provisional metric results as validated
+  quality claims.
 - Keep secrets and private data outside version control.
 - Provide reproducible development and verification instructions.
 
