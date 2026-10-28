@@ -56,13 +56,17 @@ See the development guides before starting the database or running tests:
 - [PostgreSQL and pgvector setup](docs/development/postgresql-setup.md)
 - [PostgreSQL SQL command reference](docs/development/postgresql-sql-reference.md)
 - [V1 retrieval evaluation record](docs/development/retrieval-evaluation-v1/README.md)
+- [V1 merits, algorithms, limitations, and complexity](docs/development/v1-merits-algorithms-complexity.md)
 
 The PostgreSQL setup guide explains local credentials, database initialization,
 the isolated integration-test database, and safe container lifecycle commands.
 The SQL reference documents the schema and SQL used by the vector-index
 implementation, along with database inspection and read-only diagnostic queries.
-The V1 evaluation record preserves the benchmark and diagnostic metrics; its
-relevance judgments remain provisional and unvalidated.
+The V1 evaluation record establishes an initial benchmark for comparing
+retrieval improvements; its eight-question relevance judgments are provisional
+and will be strengthened as the benchmark expands.
+The V1 architecture analysis describes the algorithms actually used, current
+trade-offs, limitations, and theoretical time/space complexity by pipeline stage.
 
 Do not commit `.env` files, database data, model weights, private PDFs, or
 generated embedding vectors.
