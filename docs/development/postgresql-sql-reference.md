@@ -229,6 +229,32 @@ The `%s` markers below are **Psycopg parameter placeholders**. These are
 application SQL patterns, not statements to paste unchanged into an interactive
 `psql` session.
 
+### Bootstrap initialization script
+
+The Compose file mounts `docker/postgres/init/01-init.sql` into the
+PostgreSQL image's initialization directory. The script runs when the
+database data directory is first initialized; changing the script or
+environment variables does not automatically recreate roles or update
+passwords in an existing persistent volume.
+
+The script reads role and database settings from the Compose environment
+through psql's `\\getenv` command, then executes:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+
+CREATE ROLE :"app_user" LOGIN PASSWORD :'app_password';
+
+GRANT CONNECT ON DATABASE :"db_name" TO :"app_user";
+GRANT USAGE, CREATE ON SCHEMA public TO :"app_user";
+GRANT USAGE ON TYPE public.vector TO :"app_user";
+```
+
+The role and password tokens in this snippet use psql variable substitution;
+they are not literal role names or passwords. The real values come from
+`.env` through Compose. Do not paste actual credentials into documentation
+or run role-creation statements repeatedly against an existing role.
+
 ### 7.1 Initialize index metadata table
 
 ```sql
