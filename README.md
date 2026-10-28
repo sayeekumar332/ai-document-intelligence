@@ -35,18 +35,26 @@ sufficient to answer a question.
 
 ## Technology Stack
 
-| Component | Technology |
+| Component | Technology and documented version |
 |---|---|
-| Language | Python 3.12 |
-| PDF extraction | PyMuPDF |
-| Passage chunking | Python |
-| Embeddings | Sentence Transformers and PyTorch |
-| Database | PostgreSQL |
-| Vector operations | pgvector |
-| Local database environment | Docker Compose |
-| PostgreSQL driver | Psycopg 3 |
-| Tests | pytest |
-| Linting | Ruff |
+| Language | Python 3.12.3 (documented development environment); supported range: `>=3.12,<3.13` |
+| PDF extraction | PyMuPDF; declared range: `>=1.24,<2` (exact installed version not recorded) |
+| Passage chunking | Python 3.12.3 standard library; no separate dependency |
+| Embeddings | Sentence Transformers 5.7.0 (documented verification environment); PyTorch version not recorded or pinned |
+| Database | PostgreSQL 17.11; Compose image: `pgvector/pgvector:0.8.7-pg17-bookworm` |
+| Vector operations | pgvector PostgreSQL extension 0.8.7; Python `pgvector` package 0.5.1 (declared range: `>=0.3,<1`) |
+| Local database environment | Docker Compose (exact version not recorded) |
+| PostgreSQL driver | Psycopg 3.3.6 (declared range: `>=3.2,<4`) |
+| Tests | pytest; declared range: `>=8,<9` (exact installed version not recorded) |
+| Linting | Ruff; declared range: `>=0.11,<1` (exact installed version not recorded) |
+
+Exact versions are shown where the repository documents them. Where only a
+version range is available, the table states the declared range rather than
+guessing which patch version is installed. The project does not currently
+include a complete lock file for all Python dependencies. See [Python
+development and verification commands](docs/development/python-commands.md)
+and [PostgreSQL and pgvector setup](docs/development/postgresql-setup.md)
+for the documented environment details.
 
 ## Local Development
 
