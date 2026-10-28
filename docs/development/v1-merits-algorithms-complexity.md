@@ -170,12 +170,14 @@ are validated before stronger quality claims are made.
 
 ## 5. Limitations and risks
 
-### 5.1 Retrieval quality is not yet validated
+### 5.1 Evaluation baseline and next validation steps
 
-The V1 evaluation contains only eight questions, and relevance judgments are
-provisional. It cannot establish general performance across documents,
-industries, writing styles, or user queries. Broader testing and validated
-human judgments are needed.
+The V1 evaluation establishes an initial benchmark for semantic retrieval,
+providing a foundation for measuring improvements in future versions. The
+current benchmark contains eight questions, and its relevance judgments are
+provisional. As the benchmark expands and the judgments are validated,
+subsequent evaluations can provide increasingly robust evidence of retrieval
+performance across a broader range of documents, domains, and queries.
 
 ### 5.2 Text-only PDF ingestion
 
@@ -444,9 +446,9 @@ database overhead also contribute materially.
 **Main V1 trade-off:** the system prioritizes simplicity, local execution,
 traceability, and an exact-search correctness baseline. The main scaling
 constraint is query-time exact vector search over a growing corpus, while the
-main quality constraints are provisional evaluation judgments, text-only
-ingestion, character-based chunking, and the absence of answer generation and
-evidence-sufficiency checks.
+key areas for continued improvement are evaluation coverage and judgment
+validation, text-only ingestion, character-based chunking, and the future
+addition of answer generation and evidence-sufficiency checks.
 
 ## 10. Recommended work before claiming production readiness
 
