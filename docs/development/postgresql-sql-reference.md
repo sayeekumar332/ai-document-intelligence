@@ -241,9 +241,9 @@ The script reads role and database settings from the Compose environment
 through these psql meta-commands:
 
 ```text
-\\getenv app_user APP_DB_USER
-\\getenv app_password APP_DB_PASSWORD
-\\getenv db_name POSTGRES_DB
+\getenv app_user APP_DB_USER
+\getenv app_password APP_DB_PASSWORD
+\getenv db_name POSTGRES_DB
 ```
 
 It then executes:
