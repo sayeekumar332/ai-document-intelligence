@@ -321,7 +321,7 @@ This is an operation-count model, not a prediction of seconds. Neural inference 
 For `C` new or updated passages with `d`-dimensional vectors:
 
 - **Application validation time:** `O(Cd + S_p)`, where `S_p` is the total passage-text size being validated/copied.
-- **Database writes:** one transactional batch containing `C` parameterized upserts. With primary-key and document B-tree maintenance, a useful rough growth model is `O(C log M + Cd + S_p)`, excluding database page I/O, locks, WAL, and other PostgreSQL implementation costs.
+- **Database writes:** one transactional batch containing `C` parameterized upserts. With primary-key and document B-tree maintenance, a useful rough growth model is `O(C log(M + C + 1) + Cd + S_p)`, excluding database page I/O, locks, WAL, and other PostgreSQL implementation costs.
 - **Application working space:** `O(Cd + S_p)`, because the adapter materializes the input sequence and validated records before the transactional write.
 - **Persistent space:** passage text, metadata, vectors, table overhead, and indexes grow with the number of stored rows.
 
@@ -375,7 +375,7 @@ Ignoring PDF-parser-specific behavior and database I/O, an approximate
 combined model is:
 
 ```text
-O(P + S + C * A * (L^2 * H + L * H^2) + C * (d + log M) + S_p)
+O(P + S + C * A * (L^2 * H + L * H^2) + C * (d + log(M + C + 1)) + S_p)
 ```
 
 where `S_p` is the text size in passages after chunking/overlap. Some terms
@@ -418,7 +418,7 @@ Persistent database storage is separate from per-query working memory.
 ### 8.3 Persistent database space
 
 For `M` stored passages, embedding dimension `d`, and average stored
-passage text size (T̄):
+passage text size `Tbar`:
 
 ```text
 O(M * (d + Tbar))
