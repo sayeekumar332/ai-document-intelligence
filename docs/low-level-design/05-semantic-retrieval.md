@@ -95,6 +95,20 @@ The candidate multiplier is a heuristic, not a guarantee that `top_k` unique
 results will always be available. The maximum candidate count limits
 over-fetching for large requested result counts.
 
+## 5.1 Evaluation baseline
+
+The current retrieval implementation has a preserved V1 evaluation record at
+`docs/development/retrieval-evaluation-v1/README.md`. It records an
+eight-question benchmark and diagnostic Precision@5, judged-relevant
+Recall@5, and nDCG@5 scores. The relevance judgments remain provisional and
+unvalidated; the metrics are not validated claims of production quality.
+
+Use the same questions and metric definitions for direct V2 comparisons,
+record changes to data or judgments explicitly, and report regressions as well
+as gains. Do not integrate experimental reranking solely because it appears
+plausible; the recorded context-reranking experiment was rejected for V1
+because its reported metrics degraded for both NEW and BASELINE.
+
 ## 6. Ranking and Duplicate Suppression
 
 The PostgreSQL index ranks candidates by exact cosine similarity, with a
