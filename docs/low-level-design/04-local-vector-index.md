@@ -36,7 +36,7 @@ ranked passages with their original source metadata.
 
 Use PostgreSQL 17 with the pgvector extension.
 
-Proposed Docker image:
+Docker image used by the local Compose environment:
 
 `pgvector/pgvector:0.8.7-pg17-bookworm`
 
@@ -46,7 +46,7 @@ avoids silently changing the PostgreSQL or pgvector version.
 The database runs locally through Docker Compose. No cloud database or
 paid AI service is required.
 
-Proposed local host connection:
+Default local host connection:
 - Host: `127.0.0.1`
 - Port: `54329`
 - Database: `ai_document_intelligence`
@@ -74,7 +74,17 @@ Maintain index metadata containing:
 - `distance_metric`
 - `pgvector_version`
 
-The metadata identifies the schema and configured embedding space.
+The metadata table is `public.index_metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL)`.
+The application initializes it when it first creates the index. The current
+keys are `schema_version`, `model_name`, `embedding_dimension`,
+`vector_encoding`, `distance_metric`, and `pgvector_version`.
+
+The metadata identifies the schema and configured embedding space. On later
+initialization, the adapter validates the schema version, model name,
+embedding dimension, vector encoding, and distance metric, and checks that
+the passages table and embedding column type exist and match the configured
+dimension. It refuses to assume compatibility when it finds a passages table
+without metadata.
 
 The current `EmbeddedPassage` record does not identify the model revision
 that produced each vector. The index therefore cannot independently prove
@@ -87,7 +97,7 @@ or schema version must fail clearly rather than silently mixing vectors.
 
 ### 4.2 Passages table
 
-Proposed logical schema:
+The adapter creates the following schema when no index metadata or passages table exists:
 
 | Column | Purpose |
 |---|---|
@@ -101,10 +111,16 @@ Proposed logical schema:
 The embedding dimension is configurable at index initialization. The
 database schema must use the configured dimension consistently.
 
-Add a B-tree index on `document_id` to support document-level deletion.
+The actual `public.passages` table uses `passage_id TEXT PRIMARY KEY`,
+non-null metadata/text columns, `page_number INTEGER CHECK (page_number > 0)`,
+and `embedding public.vector(n) NOT NULL`, where `n` is the configured
+embedding dimension (384 for the default model). The adapter creates the
+B-tree index `idx_passages_document_id` on `document_id`.
 
 Use parameterized SQL for values. Do not interpolate untrusted text into
-SQL statements.
+SQL statements. The application owns schema initialization; the separate
+SQL reference documents inspection and diagnostic commands:
+`docs/development/postgresql-sql-reference.md`.
 
 ## 5. Vector Representation and Similarity
 
@@ -123,6 +139,13 @@ The similarity score returned by the application is:
 
 `similarity = 1 - cosine_distance`
 
+The SQL query orders by `embedding <=> query_vector` in ascending order,
+uses the passage ID as a deterministic tie-breaker, and applies
+`LIMIT top_k`. When a document ID is supplied, the parameterized
+`WHERE document_id = %s` predicate is applied before ordering and limiting.
+The selected score is `1 - (embedding <=> query_vector)`; the Python adapter
+clamps the returned float to the interval [-1, 1].
+
 The Python layer must validate:
 - Correct embedding dimensions.
 - Finite numeric values.
@@ -132,7 +155,7 @@ The Python layer must validate:
 
 Do not assume vectors supplied by injected models are normalized.
 
-## 6. Proposed Python Interface
+## 6. Implemented Python Interface
 
 Module:
 
@@ -148,8 +171,11 @@ Use psycopg 3 as the PostgreSQL client. Keep connection details configurable
 through environment variables or an injected connection configuration;
 credentials must not be hard-coded into Python source files.
 
-The constructor will accept the database connection configuration,
-model name, and embedding dimension.
+The constructor accepts optional injected database connection parameters,
+model name, and embedding dimension. Without injected parameters, it reads
+`POSTGRES_HOST`, `POSTGRES_HOST_PORT`, `POSTGRES_DB`, `APP_DB_USER`, and
+`APP_DB_PASSWORD` from the process environment. The database password is
+required; connection settings do not contain hard-coded credentials.
 
 ### `upsert(passages)`
 
