@@ -238,7 +238,15 @@ environment variables does not automatically recreate roles or update
 passwords in an existing persistent volume.
 
 The script reads role and database settings from the Compose environment
-through psql's `\\getenv` command, then executes:
+through these psql meta-commands:
+
+```text
+\\getenv app_user APP_DB_USER
+\\getenv app_password APP_DB_PASSWORD
+\\getenv db_name POSTGRES_DB
+```
+
+It then executes:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
