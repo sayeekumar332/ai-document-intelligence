@@ -37,16 +37,24 @@ sufficient to answer a question.
 
 | Component | Technology |
 |---|---|
-| Language | Python 3.12 |
-| PDF extraction | PyMuPDF |
-| Passage chunking | Python |
-| Embeddings | Sentence Transformers and PyTorch |
-| Database | PostgreSQL |
-| Vector operations | pgvector |
-| Local database environment | Docker Compose |
-| PostgreSQL driver | Psycopg 3 |
-| Tests | pytest |
-| Linting | Ruff |
+| Language | Python 3.12.3 in the documented development environment; project requirement: `>=3.12,<3.13` |
+| PDF extraction | PyMuPDF `>=1.24,<2.0` |
+| Passage chunking | Python 3.12.3; implemented with the Python standard library |
+| Embeddings | Sentence Transformers 5.7.0 (documented test environment); PyTorch version is not pinned in the project metadata |
+| Database | PostgreSQL 17.11 |
+| Vector operations | pgvector PostgreSQL extension 0.8.7; Python `pgvector` package 0.5.1 |
+| Local database environment | Docker Compose; exact version is not recorded in the repository |
+| PostgreSQL driver | Psycopg 3.3.6 |
+| Tests | pytest `>=8,<9` |
+| Linting | Ruff `>=0.11,<1.0` |
+
+The versions above reflect the versions or constraints recorded in the project
+documentation and `pyproject.toml`. Dependencies expressed as version ranges
+are not pinned to an exact patch release; the repository does not currently
+maintain a complete lock file for all Python dependencies. See
+[Python development and verification commands](docs/development/python-commands.md)
+and [PostgreSQL and pgvector setup](docs/development/postgresql-setup.md)
+for the documented environment details.
 
 ## Local Development
 
