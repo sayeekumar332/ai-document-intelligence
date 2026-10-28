@@ -108,10 +108,10 @@ The saved V1 evaluation record reports Precision@5, judged-relevant
 Recall@5, and nDCG@5. These are evaluation metrics; they are not part of the
 online retrieval algorithm itself.
 
-The benchmark has eight questions and the relevance judgments are marked
-**provisional and not validated**. The results are diagnostic and should not
-be presented as validated production-quality claims. See
-[the V1 evaluation record](retrieval-evaluation-v1/README.md).
+The current benchmark contains eight questions, and its relevance judgments
+are marked **provisional**. These results provide an initial reference point
+for comparing future versions while the benchmark expands and judgments are
+reviewed. See [the V1 evaluation record](retrieval-evaluation-v1/README.md).
 
 ### 3.6 Techniques not implemented in V1
 
