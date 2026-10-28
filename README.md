@@ -38,21 +38,22 @@ sufficient to answer a question.
 | Component | Technology and documented version |
 |---|---|
 | Language | Python 3.12.3 (documented development environment); supported range: `>=3.12,<3.13` |
-| PDF extraction | PyMuPDF; declared range: `>=1.24,<2` (exact installed version not recorded) |
+| PDF extraction | PyMuPDF 1.28.2 (declared range: `>=1.24,<2`) |
 | Passage chunking | Python 3.12.3 standard library; no separate dependency |
-| Embeddings | Sentence Transformers 5.7.0 (documented verification environment); PyTorch version not recorded or pinned |
+| Embeddings | Sentence Transformers 5.7.0; PyTorch 2.14.1 |
 | Database | PostgreSQL 17.11; Compose image: `pgvector/pgvector:0.8.7-pg17-bookworm` |
 | Vector operations | pgvector PostgreSQL extension 0.8.7; Python `pgvector` package 0.5.1 (declared range: `>=0.3,<1`) |
-| Local database environment | Docker Compose (exact version not recorded) |
+| Local database environment | Docker Compose v5.1.4 (reported development environment version) |
 | PostgreSQL driver | Psycopg 3.3.6 (declared range: `>=3.2,<4`) |
-| Tests | pytest; declared range: `>=8,<9` (exact installed version not recorded) |
-| Linting | Ruff; declared range: `>=0.11,<1` (exact installed version not recorded) |
+| Tests | pytest 8.4.2 (declared range: `>=8,<9`) |
+| Linting | Ruff 0.17.1 (declared range: `>=0.11,<1`) |
 
-Exact versions are shown where the repository documents them. Where only a
-version range is available, the table states the declared range rather than
-guessing which patch version is installed. The project does not currently
-include a complete lock file for all Python dependencies. See [Python
-development and verification commands](docs/development/python-commands.md)
+The exact versions above are a snapshot of the development environment
+reported on 2026-10-28. The ranges in `pyproject.toml` describe allowed dependency
+versions; they are not exact pins. The repository does not currently include a
+complete dependency lock file, so this table records the observed environment
+rather than guaranteeing that every installation will resolve to identical
+versions. See [Python development and verification commands](docs/development/python-commands.md)
 and [PostgreSQL and pgvector setup](docs/development/postgresql-setup.md)
 for the documented environment details.
 
