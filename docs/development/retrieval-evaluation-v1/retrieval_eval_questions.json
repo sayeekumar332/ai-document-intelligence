@@ -1,0 +1,34 @@
+[
+  {
+    "id": "Q1",
+    "question": "What is the purpose of the microcode control store?"
+  },
+  {
+    "id": "Q2",
+    "question": "How does the processor select the next microinstruction address?"
+  },
+  {
+    "id": "Q3",
+    "question": "How does the invention handle successful and unsuccessful operations?"
+  },
+  {
+    "id": "Q4",
+    "question": "What components make up the parallel architecture microprocessor?"
+  },
+  {
+    "id": "Q5",
+    "question": "What happens when one or more micro-operations cannot execute successfully?"
+  },
+  {
+    "id": "Q6",
+    "question": "How does the processor avoid repeating micro-operations that have already completed?"
+  },
+  {
+    "id": "Q7",
+    "question": "What role does the next-address field play in microinstruction sequencing?"
+  },
+  {
+    "id": "Q8",
+    "question": "How do the subprocessors and control store interact during execution?"
+  }
+]

@@ -1,0 +1,809 @@
+{
+  "schema_version": 1,
+  "experiment": "source-grounded-evidence-packet",
+  "source_of_truth": "US Patent 4,803,615",
+  "retrieval_method": "Original cosine-similarity ranking; top-20 candidates; normalized exact-text duplicate suppression; top-5 unique results.",
+  "automatic_factual_sufficiency_assessment": false,
+  "questions": [
+    {
+      "id": "Q1",
+      "question": "What is the purpose of the microcode control store?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c6",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "petition of already completed micro \noperations and consequently, delays the execution of \nmicro-operations which could be completed success \nfully. \nIn another system using microcode control, sequen \nces of microinstructions are carried out to effect certain \noverall instructions or operations. If any of the instruc \ntions in a sequence cannot be carried out, there is a \nrepetitive iteration so as to enable the carrying out of \nsuch instructions. However, this system which is dis \nclosed in U.S. Pat. No. 4,001,788, does not apply to a \nparallel architecture processor and hence does not in \nvolve the use of parallel microinstructions. \nIn yet another microprogrammed control system, \ndescribed in U.S. Pat. No. 4,179,731, a memory stores \nmicroinstructions for a branching microinstruction; ",
+              "cosine_similarity": 0.5030030904410436
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c6",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "uch a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \nmicro-operations which could be completed success \nfully. \nIn another system using microcode control, sequen \nces of microinstructions are carried out to effect certain \noverall instructions or operations. If any of the instruc \ntions in a sequence cannot be carried out, there is a \nrepetitive iteration so as to enable the carrying out of \nsuch instructions. However, this system which is dis \nclosed in U.S. Pat. No. 4,001,788, does not apply to a \nparallel architecture processor and hence does not in \nvolve the use of parallel microinstructions. \nIn yet another microprogrammed control system, \ndescribed in U.S. Pat. No. 4,179,731, a memory stores \nmicroinstructions for a ",
+              "cosine_similarity": 0.49063724279403687
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c9",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "ocode in a parallel processor \nis sequenced. In accordance with this invention, as long \nas all micro-operations within a given microinstruction \nare successfully completed, then the next sequential \nmicroinstruction which is being fetched from a control \nstore is executed in the next clock cycle of the system. \nIf any one microinstruction has one or more unsuccess \nful micro operations, then that microinstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle. \nContrary to current microprogrammed systems, a \nsystem according to the present invention would enable \nthe processing of micro-operations without having to \nwait for the availability of all subprocessors or units \nrequired by the microinstruction. A microinstruction is",
+              "cosine_similarity": 0.4815584421157837
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "or instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \n",
+              "cosine_similarity": 0.47850853204727173
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "ress' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to ",
+              "cosine_similarity": 0.47709330916404724
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "\nrequired for the execution of microinstructions. It also \nsupplies addresses to enable the data loads and data \nstores. Instruction execution by execution unit 15 is \noverlapped with operand fetches from the register file \nand result stores to the register file. \nChannel interface unit 16 accepts requests for instruc \ntion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nmajor control signals for the remaining subprocessors \nbased on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation.",
+              "cosine_similarity": 0.5177085091049377
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": " 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to perform the micro-operations \nwithin that microinstruction are relayed to control de \ncodes 18. Control decodes 18 then checks the availabil \nity of each of the required subprocessors 13, 14, and 16 \nover lines 26, 27, and 28, respectively.",
+              "cosine_similarity": 0.5174650837501843
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "\nrequired for the execution of microinstructions. It also \nsupplies addresses to enable the data loads and data \nstores. Instruction execution by execution unit 15 is \noverlapped with operand fetches from the register file \nand result stores to the register file. \nChannel interface unit 16 accepts requests for instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation.",
+              "cosine_similarity": 0.5017938910845592
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "volve the use of parallel microinstructions. \nIn yet another microprogrammed control system, \ndescribed in U.S. Pat. No. 4,179,731, a memory stores \nmicroinstructions for a branching microinstruction; an \naddress register stores the address of the next microin \nstruction to be executed; and, a microinstruction regis \nter stores the microinstruction to be executed. The pro \ngram operation of the microprogrammed control sys \nten depends on whether the microinstruction stored in \nthe microinstruction register is the branching one or \nnot. The operation of ordinary microinstructions is \nexecuted whenever the microinstruction to be executed \nis of the non-branching variety.",
+              "cosine_similarity": 0.490805059671402
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c7",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "d micro \noperations and consequently, delays the execution of \nmicro-operations which could be completed success \nfully. \nIn another system using microcode control, sequen \nces of microinstructions are carried out to effect certain \noverall instructions or operations. If any of the instruc \ntions in a sequence cannot be carried out, there is a \nrepetitive iteration so as to enable the carrying out of \nsuch instructions. However, this system which is dis \nclosed in U.S. Pat. No. 4,001,788, does not apply to a \nparallel architecture processor and hence does not in \nvolve the use of parallel microinstructions. \nIn yet another microprogrammed control system, \ndescribed in U.S. Pat. No.",
+              "cosine_similarity": 0.4837724268436432
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q2",
+      "question": "How does the processor select the next microinstruction address?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "ress' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to ",
+              "cosine_similarity": 0.6656400959920816
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "ld at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to perform the ",
+              "cosine_similarity": 0.6589440717201116
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "or instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \n",
+              "cosine_similarity": 0.6142746669918739
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "truc \ntion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nmajor control signals for the remaining subprocessors \nbased on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n5 \n10 \n15 \n25 \n30 \n35 \n45 \n50 \n55 \n65 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction ",
+              "cosine_similarity": 0.6030018443461945
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c9",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "trol decodes 18 in the next \nclock cycle to the microinstruction in latch 19 for those \nsuccessful micro-operations. If all of the micro-opera \ntions in a given microinstruction have been successfully \ncompleted, then block 34 provides that the next address \nfield near the end of a microinstruction is used to select \nthe next microinstruction address so as to access and \nfetch the next microinstruction. Finally, in block 35, the \nnext microinstruction is accessed and input to latch 19 \nusing the table previously described within control \nstore 17. \nFIG. 3 illustrates one example of the execution of \nvarious micro-operations within a microinstruction \nover several clock cycles. The microinstruction for \ncycle 1 attempts to generate a load request to the chan \nnel interface unit 16 and to ",
+              "cosine_similarity": 0.583311215047024
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c5",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "\nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n5 \n10 \n15 \n25 \n30 \n35 \n45 \n50 \n55 \n65 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13.",
+              "cosine_similarity": 0.6893983462990886
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c5",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "\nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13.",
+              "cosine_similarity": 0.6800143110739386
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "\nrequired for the execution of microinstructions. It also \nsupplies addresses to enable the data loads and data \nstores. Instruction execution by execution unit 15 is \noverlapped with operand fetches from the register file \nand result stores to the register file. \nChannel interface unit 16 accepts requests for instruc \ntion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nmajor control signals for the remaining subprocessors \nbased on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation.",
+              "cosine_similarity": 0.6201809727822006
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p5:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "complex \nas the microinstruction becomes more horizontal, i.e., as \nthe microinstruction performs more micro-operations. \nFor example, a microinstruction to perform a load oper \nation may be fetching the next instruction from an in \nstruction prefetch unit; fetching operands for the next \nexecute cycle from a register file; allocating register file \naddress logic which enables load operations to be over \nlapped with instruction execution; and, allocating a \nchannel interface queue for the load request. Any one of \nthese operations may not be successfully completed.",
+              "cosine_similarity": 0.6195230568308143
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "\nrequired for the execution of microinstructions. It also \nsupplies addresses to enable the data loads and data \nstores. Instruction execution by execution unit 15 is \noverlapped with operand fetches from the register file \nand result stores to the register file. \nChannel interface unit 16 accepts requests for instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation.",
+              "cosine_similarity": 0.6017286893614501
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q3",
+      "question": "How does the invention handle successful and unsuccessful operations?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p14:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 14,
+              "text": "time, the next \nmicroinstruction is fetched from control store 17 to \nlatch 19 and the process continues. \nAlthough the description of the operation of the in \nvention provided herein has been primarily directed to \na particular illustration, the microinstruction executed \nO \n15 \n20 \n25 \n35 \n45 \n55 \n65 \n6 \nin FIG. 3, it will be understood that the invention may \nbe used to execute any number of microinstructions. \nAdditionally, it will be understood that many modifica \ntions and variations in hardware and operational tech \nnique and use are possible within the contemplated \nscope of the invention without departing from the spirit \nof the invention. \nWhat is claimed is: \n1. A microprogrammed parallel processor including a \nplurality of processing units, operable under control of \n",
+              "cosine_similarity": 0.36580023169517517
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p7:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 7,
+              "text": "time, the next \nmicroinstruction is fetched from control store 17 to \nlatch 19 and the process continues. \nAlthough the description of the operation of the in \nvention provided herein has been primarily directed to \na particular illustration, the microinstruction executed \n10 \n15 \n25 \n30 \n35 \n40 \n45 \n50 \n55 \n65 \n6 \nin FIG. 3, it will be understood that the invention may \nbe used to execute any number of microinstructions. \nAdditionally, it will be understood that many modifica \ntions and variations in hardware and operational tech \nnique and use are possible within the contemplated \nscope of the invention without departing from the spirit \nof the invention. \nWhat is claimed is: \n1. A microprogrammed parallel processor including a \nplurality of processing units, operable under control of \n",
+              "cosine_similarity": 0.36511164903640747
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p10:c0",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 10,
+              "text": "U.S. Patent \nEXECUTE \nMCRO - \nNSTRUCTION \nAL \nOF MICRO \nNSTRUCTION \nSUCCESS \nFU \nUSE NEXT ADDRESS \nFELD TO SELECT \nNEXT \nCRON - \nSTRUCTION \nACCESS NEXT \nNCRON \nSTRUCTION \nFeb. 7, 1989 \nSheet 2 of 3 \nREPEA, UNSUCCESSFUL \nOPERATIONS: NO OP \nSUCCESSFUL OPER - \nATIONS \nF. G. \n2 \n4,803,615",
+              "cosine_similarity": 0.3638884831633713
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p9:c2",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 9,
+              "text": "Examiner-Gareth D. Shaw \nAssistant Examiner-Jonathan C. Fairbanks \nAttorney, Agent, or Firm-J. F. Villella, Jr.; Thomas E. \nTyson \n57 \nABSTRACT \nplurality of subprocessors operates under the control of (o \nmicroinstructions. Each microinstruction contains a \nplurality of micro-operations each of which requires \none or more subprocessors for execution. All micro \noperations for which required subprocessors are avail \nable are immediately carried out. Any remaining micro \noperations within a microinstruction which are not \nexecuted due to lack of subprocessor availability are \nrecycled. These remaining micro-operations are exe \ncuted in subsequent cycles as a required subprocessor \nbecomes available. The entire microinstruction is not \nrecycled but only those portions of it, i.e., the unexe ",
+              "cosine_similarity": 0.3497415960143119
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": " a parallel processor \nis sequenced. In accordance with this invention, as long \nas all micro-operations within a given microinstruction \nare successfully completed, then the next sequential \nmicroinstruction which is being fetched from a control \nstore is executed in the next clock cycle of the system. \nIf any one microinstruction has one or more unsuccess \nful micro operations, then that microinstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle. \nContrary to current microprogrammed systems, a \nsystem according to the present invention would enable \nthe processing of micro-operations without having to \nwait for the availability of all subprocessors or units \nrequired by the microinstruction. A microinstruction is",
+              "cosine_similarity": 0.3489704728126526
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p10:c0",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 10,
+              "text": "U.S. Patent \nEXECUTE \nMCRO - \nNSTRUCTION \nAL \nOF MICRO \nNSTRUCTION \nSUCCESS \nFU \nUSE NEXT ADDRESS \nFELD TO SELECT \nNEXT \nCRON - \nSTRUCTION \nACCESS NEXT \nNCRON \nSTRUCTION \nFeb. 7, 1989 \nSheet 2 of 3 \nREPEA, UNSUCCESSFUL \nOPERATIONS: NO OP \nSUCCESSFUL OPER - \nATIONS \nF. G. \n2 \n4,803,615",
+              "cosine_similarity": 0.3638884831633713
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p14:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 14,
+              "text": "\n55 \n65 \n6 \nin FIG. 3, it will be understood that the invention may \nbe used to execute any number of microinstructions. \nAdditionally, it will be understood that many modifica \ntions and variations in hardware and operational tech \nnique and use are possible within the contemplated \nscope of the invention without departing from the spirit \nof the invention. \nWhat is claimed is: \n1. A microprogrammed parallel processor including a \nplurality of processing units, operable under control of \nmicroinstructions each containing a plurality of micro \noperations, said microprogrammed parallel processor \ncomprising: \nmeans for executing, during a cycle, each of said \nplurality of micro-operations, within a microin \nstruction, for which a required processing unit is \navailable; \nmeans connected to ",
+              "cosine_similarity": 0.35690510272979736
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p9:c2",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 9,
+              "text": " 370-375, 386-387, 402-407, 28, 29, \n156, 157, 488-491. \nPrimary Examiner-Gareth D. Shaw \nAssistant Examiner-Jonathan C. Fairbanks \nAttorney, Agent, or Firm-J. F. Villella, Jr.; Thomas E. \nTyson \n57 \nABSTRACT \nplurality of subprocessors operates under the control of (o \nmicroinstructions. Each microinstruction contains a \nplurality of micro-operations each of which requires \none or more subprocessors for execution. All micro \noperations for which required subprocessors are avail \nable are immediately carried out. Any remaining micro \noperations within a microinstruction which are not \nexecuted due to lack of subprocessor availability are \nrecycled. These remaining micro-operations are exe \ncuted in subsequent cycles as a required subprocessor \nbecomes available.",
+              "cosine_similarity": 0.3417889068378346
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p8:c1",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 8,
+              "text": "equired processing units \nindicating which micro-operations were not executed \nbecome available. \nduring said cycle; \n6. A method according to claim 5 further comprising \nfetching a next microinstruction for execution subse \n- \n- \nquent to all micro-operations in said microinstruction \nmicroinstruction indicated as not executed during to being executed \nrecycling only those micro-operations within said \nthe cycle; \nis \nis \n15 \n20 \n25 \n30 \n35 \n45 \n50 \n55 \n65",
+              "cosine_similarity": 0.33830867181368696
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c11",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "nstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle. \nContrary to current microprogrammed systems, a \nsystem according to the present invention would enable \nthe processing of micro-operations without having to \nwait for the availability of all subprocessors or units \nrequired by the microinstruction. A microinstruction is",
+              "cosine_similarity": 0.33817095529014196
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q4",
+      "question": "What components make up the parallel architecture microprocessor?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c0",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "4,803,615 \n1. \nMCROCODE CONTROL OF A PARALLEL \nARCHITECTURE MCROPROCESSOR \nThis is a continuation of application Ser. No. 666,789 \nfiled Oct. 31, 1984, now abandoned. \nDESCRIPTION \n1. Technical Field \nThis invention relates to the sequential processing of \nmicroinstructions in a parallel architecture micro \nprocessor having a plurality of units or subprocessors. \n2. Background Art \nIn general, a microcoded processor requires rela \ntively simple synchronous operation at the microcode \nlevel. However, performance improvements may be \nachieved by dividing the processor into smaller sub \nprocessors or units. Each subprocessor may then be \noptimized to do a particular task with maximum effi \nciency and in parallel with other subprocessors. The \nfollowing are examples of such typical ",
+              "cosine_similarity": 0.6388887978262437
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c0",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "4,803,615 \n1. \nMCROCODE CONTROL OF A PARALLEL \nARCHITECTURE MCROPROCESSOR \nThis is a continuation of application Ser. No. 666,789 5 \nfiled Oct. 31, 1984, now abandoned. \nDESCRIPTION \n1. Technical Field \nThis invention relates to the sequential processing of 10 \nmicroinstructions in a parallel architecture micro \nprocessor having a plurality of units or subprocessors. \n2. Background Art \nIn general, a microcoded processor requires rela \ntively simple synchronous operation at the microcode 15 \nlevel. However, performance improvements may be \nachieved by dividing the processor into smaller sub \nprocessors or units. Each subprocessor may then be \noptimized to do a particular task with maximum effi \nciency and in parallel with other subprocessors. The 20 \nfollowing are examples of such typical ",
+              "cosine_similarity": 0.6240206584918118
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": " a parallel processor \nis sequenced. In accordance with this invention, as long \nas all micro-operations within a given microinstruction \nare successfully completed, then the next sequential \nmicroinstruction which is being fetched from a control \nstore is executed in the next clock cycle of the system. \nIf any one microinstruction has one or more unsuccess \nful micro operations, then that microinstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle. \nContrary to current microprogrammed systems, a \nsystem according to the present invention would enable \nthe processing of micro-operations without having to \nwait for the availability of all subprocessors or units \nrequired by the microinstruction. A microinstruction is",
+              "cosine_similarity": 0.5869269617243442
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p1:c2",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 1,
+              "text": "rimary Examiner-Gareth D. Shaw \nAssistant Examiner-Jonathan C. Fairbanks \nAttorney, Agent, or Firm-J. F. Villella, Jr.; Thomas E. \nTyson \n57 \nABSTRACT \nA microprogrammed parallel processor including a \nplurality of subprocessors operates under the control of \nmicroinstructions. Each microinstruction contains a \nplurality of micro-operations each of which requires \none or more subprocessors for execution. All micro \noperations for which required subprocessors are avail \nable are immediately carried out. Any remaining micro \noperations within a microinstruction which are not \nexecuted due to lack of subprocessor availability are \nrecycled. These remaining micro-operations are exe \ncuted in subsequent cycles as a required subprocessor \nbecomes available. The entire microinstruction is not \n",
+              "cosine_similarity": 0.5756419553970136
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "in a given microinstruction may take a number of \nclock cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor is shown in U.S. Pat. No. 4,179,737. In accor \ndance with the method disclosed therein, instead of \nwaiting for all units or subprocessors to become avail \nable, those micro-operations for which resources are \navailable are immediately carried out. The entire micro \ninstruction is then recycled until such time as all the \nunits or subprocessors necessary for completion of all of \nthe micro-operations within a given microinstruction \nare available. Only at that time would the system pro \nceed with the next microinstruction. Such a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \n",
+              "cosine_similarity": 0.5176137973300349
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p5:c0",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "4,803,615 \n1. \nMCROCODE CONTROL OF A PARALLEL \nARCHITECTURE MCROPROCESSOR \nThis is a continuation of application Ser. No. 666,789 \nfiled Oct. 31, 1984, now abandoned. \nDESCRIPTION \n1. Technical Field \nThis invention relates to the sequential processing of \nmicroinstructions in a parallel architecture micro \nprocessor having a plurality of units or subprocessors. \n2. Background Art \nIn general, a microcoded processor requires rela \ntively simple synchronous operation at the microcode \nlevel. However, performance improvements may be \nachieved by dividing the processor into smaller sub \nprocessors or units. Each subprocessor may then be \noptimized to do a particular task with maximum effi \nciency and in parallel with other subprocessors.",
+              "cosine_similarity": 0.647290310425145
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c0",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "4,803,615 \n1. \nMCROCODE CONTROL OF A PARALLEL \nARCHITECTURE MCROPROCESSOR \nThis is a continuation of application Ser. No. 666,789 5 \nfiled Oct. 31, 1984, now abandoned. \nDESCRIPTION \n1. Technical Field \nThis invention relates to the sequential processing of 10 \nmicroinstructions in a parallel architecture micro \nprocessor having a plurality of units or subprocessors. \n2. Background Art \nIn general, a microcoded processor requires rela \ntively simple synchronous operation at the microcode 15 \nlevel. However, performance improvements may be \nachieved by dividing the processor into smaller sub \nprocessors or units. Each subprocessor may then be \noptimized to do a particular task with maximum effi \nciency and in parallel with other subprocessors.",
+              "cosine_similarity": 0.6201071369584132
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p1:c2",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 1,
+              "text": " 370-375, 386-387, 402-407, 28, 29, \n156, 157, 488-491. \nPrimary Examiner-Gareth D. Shaw \nAssistant Examiner-Jonathan C. Fairbanks \nAttorney, Agent, or Firm-J. F. Villella, Jr.; Thomas E. \nTyson \n57 \nABSTRACT \nA microprogrammed parallel processor including a \nplurality of subprocessors operates under the control of \nmicroinstructions. Each microinstruction contains a \nplurality of micro-operations each of which requires \none or more subprocessors for execution. All micro \noperations for which required subprocessors are avail \nable are immediately carried out. Any remaining micro \noperations within a microinstruction which are not \nexecuted due to lack of subprocessor availability are \nrecycled.",
+              "cosine_similarity": 0.6011722921626405
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p14:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 14,
+              "text": "\n55 \n65 \n6 \nin FIG. 3, it will be understood that the invention may \nbe used to execute any number of microinstructions. \nAdditionally, it will be understood that many modifica \ntions and variations in hardware and operational tech \nnique and use are possible within the contemplated \nscope of the invention without departing from the spirit \nof the invention. \nWhat is claimed is: \n1. A microprogrammed parallel processor including a \nplurality of processing units, operable under control of \nmicroinstructions each containing a plurality of micro \noperations, said microprogrammed parallel processor \ncomprising: \nmeans for executing, during a cycle, each of said \nplurality of micro-operations, within a microin \nstruction, for which a required processing unit is \navailable; \nmeans connected to ",
+              "cosine_similarity": 0.5672990937650754
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor is shown in U.S. Pat. No. 4,179,737. In accor \ndance with the method disclosed therein, instead of \nwaiting for all units or subprocessors to become avail \nable, those micro-operations for which resources are \navailable are immediately carried out. The entire micro \ninstruction is then recycled until such time as all the \nunits or subprocessors necessary for completion of all of \nthe micro-operations within a given microinstruction \nare available. Only at that time would the system pro \nceed with the next microinstruction. Such a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \nmicro-operations which could be completed success \nfully.",
+              "cosine_similarity": 0.5187687564630067
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q5",
+      "question": "What happens when one or more micro-operations cannot execute successfully?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c7",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "e micro-operations having avail \nable subprocessors are carried out. The unexecuted \nmicro-operations are then recycled and once again the \navailability of all required subprocessors is checked. If \nany required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made ",
+              "cosine_similarity": 0.6238709092140198
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": " load operations to be over \nlapped with instruction execution; and, allocating a \nchannel interface queue for the load request. Any one of \nthese operations may not be successfully completed. \nAnother problem that arises because of the horizontal \nnature of a microinstruction is that some micro-opera \ntions within a given microinstruction may be success \nfully completed, while other micro-operations within \nthe same microinstruction may not be successfully com \npleted. Consequently a given microinstruction may \nhave any combination of successful and unsuccessful \nmicro-operations. Such unsuccessful micro-operations \n5 \nO \n15 \n25 \n30 \n35 \n40 \n45 \n50 \n55 \n60 \n65 \n2 \nwithin a given microinstruction may take a number of \nclock cycles to be resolved. \nOne method for executing microcode in a ",
+              "cosine_similarity": 0.6133110157662035
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c7",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "perations having avail \nable subprocessors are carried out. The unexecuted \nmicro-operations are then recycled and once again the \navailability of all required subprocessors is checked. If \nany required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated . \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to ",
+              "cosine_similarity": 0.6095279091878002
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "logic which enables load operations to be over \nlapped with instruction execution; and, allocating a \nchannel interface queue for the load request. Any one of \nthese operations may not be successfully completed. \n60 \nAnother problem that arises because of the horizontal \nnature of a microinstruction is that some micro-opera \ntions within a given microinstruction may be success \nfully completed, while other micro-operations within \nthe same microinstruction may not be successfully con- 65 \npleted. Consequently a given microinstruction may \nhave any combination of successful and unsuccessful \nmicro-operations. Such unsuccessful micro-operations \n2 \nwithin a given microinstruction may take a number of \nclock cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor ",
+              "cosine_similarity": 0.6070959206166325
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c8",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to whether or not all of the micro-operations \nin the microinstruction have been successfully com \npleted. The completion of such micro-operations, as \npreviously described, depends upon the availability of \nall required subprocessors. If all micro-operations are \nnot successfully completed, then block 33 requires that \nall unsuccessful micro-operations be repeated. Once \nagain, it is emphasized that only those unsuccessful \nmicro-operations are repeated. Any successful micro \noperation is not repeated, but rather a \"no operation' \nsignal is supplied by control decodes 18 in the next \nclock cycle to the microinstruction in latch 19 for those \nsuccessful micro-operations. If ",
+              "cosine_similarity": 0.5985923409461975
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "ny required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to whether or not all of the micro-operations \nin the microinstruction have been successfully com \npleted.",
+              "cosine_similarity": 0.6335783819211505
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "ny required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated . \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to whether or not all of the micro-operations \nin the microinstruction have been successfully com \npleted.",
+              "cosine_similarity": 0.6241251454278751
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c10",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "ocessor which im \nproves performance by executing micro-operations \nwithin a given microinstruction as soon as possible. \nThese and other objects are accomplished by altering \nthe way in which the microcode in a parallel processor \nis sequenced. In accordance with this invention, as long \nas all micro-operations within a given microinstruction \nare successfully completed, then the next sequential \nmicroinstruction which is being fetched from a control \nstore is executed in the next clock cycle of the system. \nIf any one microinstruction has one or more unsuccess \nful micro operations, then that microinstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle.",
+              "cosine_similarity": 0.6238520741462708
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p5:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "complex \nas the microinstruction becomes more horizontal, i.e., as \nthe microinstruction performs more micro-operations. \nFor example, a microinstruction to perform a load oper \nation may be fetching the next instruction from an in \nstruction prefetch unit; fetching operands for the next \nexecute cycle from a register file; allocating register file \naddress logic which enables load operations to be over \nlapped with instruction execution; and, allocating a \nchannel interface queue for the load request. Any one of \nthese operations may not be successfully completed.",
+              "cosine_similarity": 0.6179329384605337
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor is shown in U.S. Pat. No. 4,179,737. In accor \ndance with the method disclosed therein, instead of \nwaiting for all units or subprocessors to become avail \nable, those micro-operations for which resources are \navailable are immediately carried out. The entire micro \ninstruction is then recycled until such time as all the \nunits or subprocessors necessary for completion of all of \nthe micro-operations within a given microinstruction \nare available. Only at that time would the system pro \nceed with the next microinstruction. Such a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \nmicro-operations which could be completed success \nfully.",
+              "cosine_similarity": 0.5983405113220215
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q6",
+      "question": "How does the processor avoid repeating micro-operations that have already completed?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "in a given microinstruction may take a number of \nclock cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor is shown in U.S. Pat. No. 4,179,737. In accor \ndance with the method disclosed therein, instead of \nwaiting for all units or subprocessors to become avail \nable, those micro-operations for which resources are \navailable are immediately carried out. The entire micro \ninstruction is then recycled until such time as all the \nunits or subprocessors necessary for completion of all of \nthe micro-operations within a given microinstruction \nare available. Only at that time would the system pro \nceed with the next microinstruction. Such a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \n",
+              "cosine_similarity": 0.7286102337473505
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "ruction may take a number of \nclock cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor is shown in U.S. Pat. No. 4,179,737. In accor \ndance with the method disclosed therein, instead of \nwaiting for all units or subprocessors to become avail \nable, those micro-operations for which resources are \navailable are immediately carried out. The entire micro \ninstruction is then recycled until such time as all the \nunits or subprocessors necessary for completion of all of \nthe micro-operations within a given microinstruction \nare available. Only at that time would the system pro \nceed with the next microinstruction. Such a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \nmicro-operations which could ",
+              "cosine_similarity": 0.7269215150522296
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": " a parallel processor \nis sequenced. In accordance with this invention, as long \nas all micro-operations within a given microinstruction \nare successfully completed, then the next sequential \nmicroinstruction which is being fetched from a control \nstore is executed in the next clock cycle of the system. \nIf any one microinstruction has one or more unsuccess \nful micro operations, then that microinstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle. \nContrary to current microprogrammed systems, a \nsystem according to the present invention would enable \nthe processing of micro-operations without having to \nwait for the availability of all subprocessors or units \nrequired by the microinstruction. A microinstruction is",
+              "cosine_similarity": 0.6753518774895753
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c7",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "e micro-operations having avail \nable subprocessors are carried out. The unexecuted \nmicro-operations are then recycled and once again the \navailability of all required subprocessors is checked. If \nany required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made ",
+              "cosine_similarity": 0.6711943941596523
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c7",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "perations having avail \nable subprocessors are carried out. The unexecuted \nmicro-operations are then recycled and once again the \navailability of all required subprocessors is checked. If \nany required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated . \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to ",
+              "cosine_similarity": 0.6558624916240583
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "cycles to be resolved. \nOne method for executing microcode in a parallel \nprocessor is shown in U.S. Pat. No. 4,179,737. In accor \ndance with the method disclosed therein, instead of \nwaiting for all units or subprocessors to become avail \nable, those micro-operations for which resources are \navailable are immediately carried out. The entire micro \ninstruction is then recycled until such time as all the \nunits or subprocessors necessary for completion of all of \nthe micro-operations within a given microinstruction \nare available. Only at that time would the system pro \nceed with the next microinstruction. Such a method \nrequires the repetition of already completed micro \noperations and consequently, delays the execution of \nmicro-operations which could be completed success \nfully.",
+              "cosine_similarity": 0.7509191184688153
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c10",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "ocessor which im \nproves performance by executing micro-operations \nwithin a given microinstruction as soon as possible. \nThese and other objects are accomplished by altering \nthe way in which the microcode in a parallel processor \nis sequenced. In accordance with this invention, as long \nas all micro-operations within a given microinstruction \nare successfully completed, then the next sequential \nmicroinstruction which is being fetched from a control \nstore is executed in the next clock cycle of the system. \nIf any one microinstruction has one or more unsuccess \nful micro operations, then that microinstruction is al \ntered by random logic and the unsuccessful micro-oper \nations are re-executed in the next clock cycle.",
+              "cosine_similarity": 0.6995988667250368
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "ny required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to whether or not all of the micro-operations \nin the microinstruction have been successfully com \npleted.",
+              "cosine_similarity": 0.6477219286296453
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "ny required subprocessors remain unavailable, once \nagain all micro-operations that can be carried out are \ncarried out. This process continues until all the micro \noperations in a microinstruction are executed. How \never, once a given micro-operation in a microinstruc \ntion that is being executed is carried out, then that mi \ncro-operation is not repeated. \nThe overall operation of the system shown in FIG. 1 \nwith respect to microinstruction execution is illustrated . \nin the flow chart of FIG. 2. In block 31, a microinstruc \ntion in latch 19 is executed. In block 32, a determination \nis made as to whether or not all of the micro-operations \nin the microinstruction have been successfully com \npleted.",
+              "cosine_similarity": 0.6366980508925854
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p1:c2",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 1,
+              "text": " 370-375, 386-387, 402-407, 28, 29, \n156, 157, 488-491. \nPrimary Examiner-Gareth D. Shaw \nAssistant Examiner-Jonathan C. Fairbanks \nAttorney, Agent, or Firm-J. F. Villella, Jr.; Thomas E. \nTyson \n57 \nABSTRACT \nA microprogrammed parallel processor including a \nplurality of subprocessors operates under the control of \nmicroinstructions. Each microinstruction contains a \nplurality of micro-operations each of which requires \none or more subprocessors for execution. All micro \noperations for which required subprocessors are avail \nable are immediately carried out. Any remaining micro \noperations within a microinstruction which are not \nexecuted due to lack of subprocessor availability are \nrecycled.",
+              "cosine_similarity": 0.6306609731518653
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q7",
+      "question": "What role does the next-address field play in microinstruction sequencing?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "ress' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to ",
+              "cosine_similarity": 0.5614669845739662
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "or instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \n",
+              "cosine_similarity": 0.5595179129221582
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "truc \ntion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nmajor control signals for the remaining subprocessors \nbased on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n5 \n10 \n15 \n25 \n30 \n35 \n45 \n50 \n55 \n65 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction ",
+              "cosine_similarity": 0.5518574323909116
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "ld at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to perform the ",
+              "cosine_similarity": 0.543871007465541
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p14:c3",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 14,
+              "text": "one by clearing \nthe bits in latch 19 which make up that microinstruction \nfield. Here the cleared state of latch 19 is defined as a \nNO OP to instruction prefetch unit 13. This NO OP is \nrequired to prevent the instruction prefetch unit 13 \nfrom sequencing through instructions which have not \nyet been executed. \nFinally, the microinstruction field which controls the \noperand fetch from the register file and control 14 is \nheld in latch 19. In this situation, the operand fetch is \nsuccessful but the operands cannot be used by execution \nunit 15 in the next cycle because execution unit 15 is \nbeing presently used to compute the load address as \nshown in FIG.3. Consequently, the operand fetch oper \nation is simply repeated in the next clock cycle. \nDuring cycle 3, channel interface unit 16 ",
+              "cosine_similarity": 0.5262182323672532
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c5",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "\nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n5 \n10 \n15 \n25 \n30 \n35 \n45 \n50 \n55 \n65 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13.",
+              "cosine_similarity": 0.5750490508929808
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c5",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "\nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13.",
+              "cosine_similarity": 0.5553035239604007
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c10",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": " control decodes 18 in the next \nclock cycle to the microinstruction in latch 19 for those \nsuccessful micro-operations. If all of the micro-opera \ntions in a given microinstruction have been successfully \ncompleted, then block 34 provides that the next address \nfield near the end of a microinstruction is used to select \nthe next microinstruction address so as to access and \nfetch the next microinstruction. Finally, in block 35, the \nnext microinstruction is accessed and input to latch 19 \nusing the table previously described within control \nstore 17. \nFIG. 3 illustrates one example of the execution of \nvarious micro-operations within a microinstruction \nover several clock cycles.",
+              "cosine_similarity": 0.5165490488351562
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p5:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 5,
+              "text": "volve the use of parallel microinstructions. \nIn yet another microprogrammed control system, \ndescribed in U.S. Pat. No. 4,179,731, a memory stores \nmicroinstructions for a branching microinstruction; an \naddress register stores the address of the next microin \nstruction to be executed; and, a microinstruction regis \nter stores the microinstruction to be executed. The pro \ngram operation of the microprogrammed control sys \ntem depends on whether the microinstruction stored in \nthe microinstruction register is the branching one or \nnot. The operation of ordinary microinstructions is \nexecuted whenever the microinstruction to be executed \nis of the non-branching variety.",
+              "cosine_similarity": 0.47614375183396085
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p12:c8",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 12,
+              "text": "volve the use of parallel microinstructions. \nIn yet another microprogrammed control system, \ndescribed in U.S. Pat. No. 4,179,731, a memory stores \nmicroinstructions for a branching microinstruction; an \naddress register stores the address of the next microin \nstruction to be executed; and, a microinstruction regis \nter stores the microinstruction to be executed. The pro \ngram operation of the microprogrammed control sys \nten depends on whether the microinstruction stored in \nthe microinstruction register is the branching one or \nnot. The operation of ordinary microinstructions is \nexecuted whenever the microinstruction to be executed \nis of the non-branching variety.",
+              "cosine_similarity": 0.4742570550135342
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q8",
+      "question": "How do the subprocessors and control store interact during execution?",
+      "versions": {
+        "BASELINE": {
+          "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "ress' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to ",
+              "cosine_similarity": 0.5695561170578003
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "ld at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to perform the ",
+              "cosine_similarity": 0.5676043887374179
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "truc \ntion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nmajor control signals for the remaining subprocessors \nbased on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n5 \n10 \n15 \n25 \n30 \n35 \n45 \n50 \n55 \n65 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction ",
+              "cosine_similarity": 0.5570346381047594
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "or instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \n",
+              "cosine_similarity": 0.5566027164459229
+            },
+            {
+              "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p1:c3",
+              "document_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc",
+              "source_name": "US4803615.pdf",
+              "page_number": 1,
+              "text": " are exe \ncuted in subsequent cycles as a required subprocessor \nbecomes available. The entire microinstruction is not \nrecycled but only those portions of it, i.e., the unexe \ncuted micro-operations, are recycled and executed in a \nsubsequent cycle. The microinstruction being executed \nis stored in a latch until all micro-operations within the \nmicroinstruction are executed. At that time, the next \nmicroinstruction is fetched into the latch. \n6 Claims, 3 Drawing Sheets \nRESER \nFE AD \nCONTROL \n4",
+              "cosine_similarity": 0.5502784252166748
+            }
+          ]
+        },
+        "NEW": {
+          "document_id": "chunk-experiment-us4803615-v1",
+          "candidate_count": 20,
+          "unique_result_count": 5,
+          "results": [
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c6",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": " 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13. \nControl store 17 provides the next microinstruction to \nbe executed which is then stored in latch 19 during the \nexecution of said microinstruction. \nEach microinstruction typically contains several mi \ncro-operations which must be performed in order to \nsuccessfully complete a given microinstruction. When \never a new microinstruction is fetched into latch 19, the \nsubprocessors required to perform the micro-operations \nwithin that microinstruction are relayed to control de \ncodes 18. Control decodes 18 then checks the availabil \nity of each of the required subprocessors 13, 14, and 16 \nover lines 26, 27, and 28, respectively.",
+              "cosine_similarity": 0.6488206595885372
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c5",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "\nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n10 \n15 \n25 \n30 \n35 \n45 \nSO \n55 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13.",
+              "cosine_similarity": 0.6440996123582012
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c5",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "\nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation. This information is relayed to latch 19 so as \nto enable the sequencing of a microinstruction stored in \nlatch 19. \n5 \n10 \n15 \n25 \n30 \n35 \n45 \n50 \n55 \n65 \n4. \nIn operation, microinstructions being executed are \nstored in latch 19. Information in the \"Next Address' \nfield at the end of each microinstruction is provided to \ncontrol decodes 18 in order to fetch the next microin \nstruction to be executed. This information is output \nover line 25 to addressing logic within instruction pre \nfetch unit 13. An address is then output from IPU 13 to \ncontrol store 17. Control store 17 is then accessed using \nthe address provided by instruction prefetch unit 13.",
+              "cosine_similarity": 0.6300700494667906
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 6,
+              "text": "\nrequired for the execution of microinstructions. It also \nsupplies addresses to enable the data loads and data \nstores. Instruction execution by execution unit 15 is \noverlapped with operand fetches from the register file \nand result stores to the register file. \nChannel interface unit 16 accepts requests for instruc \ntion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nmajor control signals for the remaining subprocessors \nbased on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation.",
+              "cosine_similarity": 0.6089712018387804
+            },
+            {
+              "passage_id": "chunk-experiment-us4803615-v1:p13:c4",
+              "document_id": "chunk-experiment-us4803615-v1",
+              "source_name": "US4803615.pdf",
+              "page_number": 13,
+              "text": "\nrequired for the execution of microinstructions. It also \nsupplies addresses to enable the data loads and data \nstores. Instruction execution by execution unit 15 is \noverlapped with operand fetches from the register file \nand result stores to the register file. \nChannel interface unit 16 accepts requests for instruc \nNN tion and data accesses; formats data and addresses; and, \ngenerates and accepts transfers across storage channel \n21. \nControl store 17 and control decodes 18 generate the \nV \nmajor control signals for the remaining subprocessors \nOn based on microinstruction decodes. Control decodes 18 \nalso receives information from the remaining sub \nprocessors that a requested subprocessor is available for \noperation.",
+              "cosine_similarity": 0.5957436206493615
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

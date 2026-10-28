@@ -1,0 +1,655 @@
+{
+  "schema_version": 1,
+  "judgment_scale": {
+    "2": "Directly answers the question with clear evidence",
+    "1": "Provides useful but incomplete supporting evidence",
+    "0": "Does not answer the question",
+    "null": "Not yet judged; exclude from metric calculations"
+  },
+  "judgment_status": "provisional",
+  "questions": [
+    {
+      "id": "Q1",
+      "question": "What is the purpose of the microcode control store?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c6",
+          "grade": 2,
+          "rationale": "States that the control store provides the next microinstruction."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+          "grade": 2,
+          "rationale": "Describes the next-address field and fetching the next microinstruction from the control store."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+          "grade": 1,
+          "rationale": "Provides related control and address-generation context, but the excerpt is incomplete."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c4",
+          "grade": 1,
+          "rationale": "Describes control-store and control-decode functions, but the excerpt is incomplete."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+          "grade": 1,
+          "rationale": "Describes control-store and control-decode functions."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+          "grade": 2,
+          "rationale": "Explains next-address selection and fetching the next microinstruction."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c8",
+          "grade": 0,
+          "rationale": "The excerpt mainly discusses a different microprogrammed control system."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c7",
+          "grade": 0,
+          "rationale": "The excerpt mainly describes prior microcode systems and unsuccessful operations."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c6",
+          "grade": 0,
+          "rationale": "The excerpt discusses other microcode systems rather than directly explaining the control store's purpose."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c9",
+          "grade": 1,
+          "rationale": "Explains microinstruction sequencing, but the excerpt does not fully define the control store."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c6",
+          "grade": 0,
+          "rationale": "Discusses earlier microcode systems and execution delays, but does not explain the purpose of this invention's microcode control store."
+        }
+      ]
+    },
+    {
+      "id": "Q2",
+      "question": "How does the processor select the next microinstruction address?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c5",
+          "grade": 2,
+          "rationale": "Describes the next-address field and the address-selection path."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c5",
+          "grade": 2,
+          "rationale": "Describes the next-address field, instruction prefetch unit, and control-store access."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+          "grade": 2,
+          "rationale": "Describes how the next-address information reaches the instruction prefetch unit."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+          "grade": 2,
+          "rationale": "Describes the next-address field and control-store access."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c9",
+          "grade": 2,
+          "rationale": "Explains next-address selection when the micro-operations have completed successfully."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+          "grade": 1,
+          "rationale": "Provides related instruction-prefetch and address-generation context."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c4",
+          "grade": 1,
+          "rationale": "Provides background on parallel microinstruction execution, but not the complete selection mechanism."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c4",
+          "grade": 1,
+          "rationale": "Describes control-store and control-decode responsibilities."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+          "grade": 1,
+          "rationale": "Provides related control-store and control-decode context."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+          "grade": 1,
+          "rationale": "Provides related address-generation context."
+        }
+      ]
+    },
+    {
+      "id": "Q3",
+      "question": "How does the invention handle successful and unsuccessful operations?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c11",
+          "grade": 2,
+          "rationale": "Explains re-execution of unsuccessful micro-operations and avoiding unnecessary waiting."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+          "grade": 2,
+          "rationale": "Describes sequential microinstruction execution when operations succeed and special handling when operations fail."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p8:c1",
+          "grade": 1,
+          "rationale": "Provides claim-related information about unsuccessful operations, but the excerpt is fragmented."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p9:c2",
+          "grade": 1,
+          "rationale": "The abstract describes the general execution model, but the excerpt is incomplete."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p9:c2",
+          "grade": 1,
+          "rationale": "The abstract provides relevant general context, but the excerpt is incomplete."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p10:c0",
+          "grade": 1,
+          "rationale": "The diagram labels relate to success and failure, but OCR text is fragmented."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p10:c0",
+          "grade": 1,
+          "rationale": "The diagram labels relate to success and failure, but OCR text is fragmented."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p7:c5",
+          "grade": 0,
+          "rationale": "The excerpt mainly discusses continuation after execution, not the success/failure mechanism."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p14:c6",
+          "grade": 0,
+          "rationale": "The excerpt mainly discusses the scope of the invention."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p14:c5",
+          "grade": 0,
+          "rationale": "The excerpt mainly describes continuation of execution and does not explain the failure-handling mechanism."
+        }
+      ]
+    },
+    {
+      "id": "Q4",
+      "question": "What components make up the parallel architecture microprocessor?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c0",
+          "grade": 1,
+          "rationale": "Provides general processor architecture context but does not contain the explicit component list."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c0",
+          "grade": 1,
+          "rationale": "Provides general processor architecture context but does not contain the explicit component list."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p1:c2",
+          "grade": 1,
+          "rationale": "Describes the processor as a microprogrammed parallel processor with multiple subprocessors, but does not enumerate the components."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p1:c2",
+          "grade": 1,
+          "rationale": "Describes the processor as a microprogrammed parallel processor with multiple subprocessors, but does not enumerate the components."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c0",
+          "grade": 1,
+          "rationale": "Provides introductory context, but the excerpt does not fully list the components."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c0",
+          "grade": 1,
+          "rationale": "Provides introductory context, but the excerpt does not fully list the components."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p14:c6",
+          "grade": 0,
+          "rationale": "The excerpt concerns the scope of the invention rather than its components."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c6",
+          "grade": 0,
+          "rationale": "The excerpt discusses execution behavior rather than enumerating the architecture."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c6",
+          "grade": 0,
+          "rationale": "The excerpt discusses execution behavior rather than enumerating the architecture."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c5",
+          "grade": 0,
+          "rationale": "The excerpt discusses micro-operation execution rather than enumerating the architecture."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c1",
+          "grade": 2,
+          "rationale": "Explicitly lists the five major units and identifies latch 19."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c1",
+          "grade": 2,
+          "rationale": "Explicitly lists the five major units and identifies latch 19."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c2",
+          "grade": 2,
+          "rationale": "Continues the component description and explains the storage channel connection and instruction prefetch unit."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c2",
+          "grade": 2,
+          "rationale": "Continues the component description and explains the storage channel connection and instruction prefetch unit."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c3",
+          "grade": 2,
+          "rationale": "Explains the roles of the instruction prefetch unit, register file and control, and execution unit."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c3",
+          "grade": 2,
+          "rationale": "Explains the roles of the instruction prefetch unit, register file and control, and execution unit."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+          "grade": 2,
+          "rationale": "Explains the channel interface unit, control store, and control decodes."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+          "grade": 2,
+          "rationale": "Explains the channel interface unit, control store, and control decodes."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+          "grade": 1,
+          "rationale": "Describes control-store sequencing and unsuccessful micro-operation handling, but does not enumerate the processor's components."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c1",
+          "grade": 2,
+          "rationale": "Explicitly lists the typical subprocessors: instruction prefetch unit, register file and control, execution unit, channel interface unit, and control store/control decodes."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c1",
+          "grade": 2,
+          "rationale": "Explicitly identifies the five major processor units and also mentions latch 19."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c9",
+          "grade": 1,
+          "rationale": "Explains microinstruction sequencing and handling of unsuccessful micro-operations, but does not enumerate the processor components."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c1",
+          "grade": 2,
+          "rationale": "Explicitly lists the typical subprocessors: instruction prefetch unit, register file and control, execution unit, channel interface unit, and control store/control decodes."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c1",
+          "grade": 2,
+          "rationale": "Explicitly identifies the five major processor units and also mentions latch 19."
+        }
+      ]
+    },
+    {
+      "id": "Q5",
+      "question": "What happens when one or more micro-operations cannot execute successfully?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c8",
+          "grade": 2,
+          "rationale": "Explains that executable micro-operations proceed while unavailable ones are deferred, and completed operations are not repeated."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c8",
+          "grade": 2,
+          "rationale": "Describes repeated availability checks and continued execution until all micro-operations complete."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c10",
+          "grade": 2,
+          "rationale": "Describes advancing when all operations succeed and re-executing unsuccessful operations otherwise."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c4",
+          "grade": 1,
+          "rationale": "Explains that individual operations may fail, but does not fully explain the recovery behavior."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c6",
+          "grade": 0,
+          "rationale": "Describes a prior approach that recycles the entire microinstruction, not the invention's handling."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p9:c2",
+          "grade": 1,
+          "rationale": "Abstract gives a useful overview of recycling unavailable operations but limited execution detail."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p1:c2",
+          "grade": 1,
+          "rationale": "Abstract describes executing available operations and recycling remaining ones."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c7",
+          "grade": 0,
+          "rationale": "Primarily discusses limitations of earlier systems rather than the invention's response."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c7",
+          "grade": 2,
+          "rationale": "Explains that available operations execute and only unfinished operations are recycled."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c4",
+          "grade": 1,
+          "rationale": "Describes mixed successful and unsuccessful operations but is incomplete about recovery."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c7",
+          "grade": 2,
+          "rationale": "Explains repeated availability checks and repetition of only unsuccessful operations."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c4",
+          "grade": 1,
+          "rationale": "Establishes that a microinstruction can contain both successful and unsuccessful operations."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c8",
+          "grade": 2,
+          "rationale": "Describes the decision path when not all micro-operations complete successfully."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c1",
+          "grade": 1,
+          "rationale": "Provides subprocessor and interlock context but not the complete recovery mechanism."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+          "grade": 2,
+          "rationale": "Directly explains re-execution of unsuccessful operations and progression after success."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c9",
+          "grade": 2,
+          "rationale": "Directly describes advancing on success and re-executing unsuccessful operations."
+        }
+      ]
+    },
+    {
+      "id": "Q6",
+      "question": "How does the processor avoid repeating micro-operations that have already completed?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c6",
+          "grade": 0,
+          "rationale": "Describes an earlier approach that repeats the entire microinstruction, unlike the invention."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c10",
+          "grade": 1,
+          "rationale": "Describes success-dependent sequencing and retry behavior but does not fully state the no-repeat rule."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c8",
+          "grade": 2,
+          "rationale": "Explicitly states that once a micro-operation is carried out, it is not repeated."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c8",
+          "grade": 2,
+          "rationale": "Explains that only unfinished operations are recycled; completed operations are not repeated."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p1:c2",
+          "grade": 1,
+          "rationale": "Abstract explains recycling only the unexecuted portions of a microinstruction."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c0",
+          "grade": 0,
+          "rationale": "General background on parallel processors; does not explain the no-repeat mechanism."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c0",
+          "grade": 0,
+          "rationale": "Introductory background does not answer how completed operations are preserved."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c5",
+          "grade": 1,
+          "rationale": "Explains that operations can independently succeed or fail, but not the complete no-repeat rule."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c5",
+          "grade": 0,
+          "rationale": "Describes a prior approach that recycles the whole microinstruction."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c5",
+          "grade": 0,
+          "rationale": "Describes an earlier whole-microinstruction recycling approach."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c9",
+          "grade": 1,
+          "rationale": "Explains retrying unsuccessful operations but is less explicit about preserving completed operations."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c7",
+          "grade": 2,
+          "rationale": "Explicitly states that a completed micro-operation is not repeated."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c7",
+          "grade": 2,
+          "rationale": "Explains that only unsuccessful operations are repeated."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c9",
+          "grade": 1,
+          "rationale": "Explains retry behavior but does not explicitly give the complete no-repeat rule."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p1:c2",
+          "grade": 1,
+          "rationale": "Abstract describes recycling only unexecuted portions of the microinstruction."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c4",
+          "grade": 1,
+          "rationale": "Establishes that operations can have different completion outcomes but lacks the full mechanism."
+        }
+      ]
+    },
+    {
+      "id": "Q7",
+      "question": "What role does the next-address field play in microinstruction sequencing?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c5",
+          "grade": 2,
+          "rationale": "Explains how the next-address field reaches control decodes and instruction-prefetch addressing logic."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c5",
+          "grade": 2,
+          "rationale": "Describes the next-address field's role in fetching the next microinstruction."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c10",
+          "grade": 2,
+          "rationale": "Explicitly states that the field selects the next microinstruction address after successful completion."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c8",
+          "grade": 0,
+          "rationale": "Discusses a different, earlier branching microprogram system."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c8",
+          "grade": 0,
+          "rationale": "Discusses a different microprogram control system rather than this invention's sequencing."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c4",
+          "grade": 0,
+          "rationale": "Describes parallel operations and possible failures, not the next-address field."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c11",
+          "grade": 1,
+          "rationale": "Provides execution-cycle context but only fragmentary next-instruction details."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c11",
+          "grade": 1,
+          "rationale": "Provides an example of execution over cycles but limited explanation of the field itself."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+          "grade": 2,
+          "rationale": "Describes the next-address field, instruction-prefetch logic, and control-store access."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+          "grade": 1,
+          "rationale": "Explains control-decode responsibilities but only partial next-address details."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+          "grade": 1,
+          "rationale": "Provides related control-store and control-decode context."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+          "grade": 2,
+          "rationale": "Explains how the field selects the address used to access the next microinstruction."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p14:c3",
+          "grade": 0,
+          "rationale": "Discusses clearing a microinstruction field to a no-op, not the next-address field."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c9",
+          "grade": 2,
+          "rationale": "Explicitly describes selection of the next address after all operations succeed."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c9",
+          "grade": 2,
+          "rationale": "Explains how successful completion triggers use of the next-address field."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p12:c6",
+          "grade": 0,
+          "rationale": "Primarily contrasts an earlier approach and does not explain this field's role."
+        }
+      ]
+    },
+    {
+      "id": "Q8",
+      "question": "How do the subprocessors and control store interact during execution?",
+      "judgments": [
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c6",
+          "grade": 2,
+          "rationale": "Explains that the control store supplies microinstructions and required subprocessors are relayed to control decodes."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c5",
+          "grade": 2,
+          "rationale": "Explains next-instruction sequencing and how subprocessor availability enables execution."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c5",
+          "grade": 1,
+          "rationale": "Provides control-decode, latch, and next-address interaction but only partial execution detail."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p6:c4",
+          "grade": 2,
+          "rationale": "Explains control-signal generation and subprocessor availability feedback."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p13:c4",
+          "grade": 2,
+          "rationale": "Describes control-store/control-decode signals and availability information used for sequencing."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p12:c8",
+          "grade": 0,
+          "rationale": "Discusses a different microprogrammed control system."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p1:c3",
+          "grade": 1,
+          "rationale": "Explains recycling of unfinished operations and fetching the next microinstruction, with limited component detail."
+        },
+        {
+          "passage_id": "chunk-experiment-us4803615-v1:p5:c1",
+          "grade": 1,
+          "rationale": "Lists the subprocessors and mentions coordination difficulties but not the complete interaction."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c5",
+          "grade": 2,
+          "rationale": "Explains control-store access and next-microinstruction sequencing."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c5",
+          "grade": 2,
+          "rationale": "Explains next-address delivery to instruction-prefetch logic and control-store access."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c4",
+          "grade": 2,
+          "rationale": "Explains control-signal generation and availability feedback to the latch."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c4",
+          "grade": 2,
+          "rationale": "Describes how control decodes use subprocessor availability to sequence execution."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p1:c3",
+          "grade": 1,
+          "rationale": "Describes recycling unfinished operations and fetching the next microinstruction."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p13:c6",
+          "grade": 2,
+          "rationale": "Explains how control decodes check required-subprocessor availability and communicate it to the latch."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p6:c6",
+          "grade": 2,
+          "rationale": "Describes subprocessor availability feedback and its effect on microinstruction sequencing."
+        },
+        {
+          "passage_id": "smoke-test-38890d30-4199-4c8b-a030-fcf5fceebdbc:p5:c7",
+          "grade": 0,
+          "rationale": "Discusses a different branching microprogram system."
+        }
+      ]
+    }
+  ]
+}
